@@ -1,7 +1,12 @@
 
 const dotenv = require('dotenv');
 const path = require('path');
+const dns = require('node:dns');
 
+// Configure DNS before connecting to MongoDB
+dns.setServers(['8.8.8.8', '8.8.4.4']);
+
+// Load environment variables
 dotenv.config({
   path: path.resolve(__dirname, '../.env')
 });

@@ -1,15 +1,22 @@
 
 const mongoose = require('mongoose');
+const dns = require('node:dns');
+
+try {
+  dns.setServers(['8.8.8.8', '1.1.1.1', '8.8.4.4']);
+} catch (e) {
+  // Ignore if not permitted
+}
 
 let connectionPromise = null;
 
 const connectDB = async () => {
-  // Reuse an existing MongoDB connection
+  // Reuse existing MongoDB connection
   if (mongoose.connection.readyState === 1) {
     return mongoose.connection;
   }
 
-  // Reuse an ongoing connection attempt
+  // Reuse ongoing connection attempt
   if (connectionPromise) {
     return connectionPromise;
   }
@@ -22,7 +29,7 @@ const connectDB = async () => {
 
   connectionPromise = mongoose.connect(uri, {
     dbName: 'physics_mirror',
-    serverSelectionTimeoutMS: 10000
+    serverSelectionTimeoutMS: 15000
   })
     .then((conn) => {
       console.log('MongoDB connected:', conn.connection.host);

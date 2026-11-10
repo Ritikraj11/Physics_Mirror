@@ -26,6 +26,7 @@ import FacultyActiveBatches from './pages/faculty/FacultyActiveBatches';
 import FacultyStudents from './pages/faculty/FacultyStudents';
 import FacultyAssignedBatches from './pages/faculty/FacultyAssignedBatches';
 import FacultyAttendance from './pages/faculty/FacultyAttendance';
+import FacultyDPP from './pages/faculty/FacultyDPP';
 
 // Student Pages
 import StudentDashboard from './pages/student/StudentDashboard';
@@ -61,6 +62,7 @@ function App() {
         <Route path="students" element={<FacultyStudents />} />
         <Route path="assigned-batches" element={<FacultyAssignedBatches />} />
         <Route path="attendance" element={<FacultyAttendance />} />
+        <Route path="dpp" element={<FacultyDPP />} />
       </Route>
 
       {/* Student Portal */}

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Outlet, Navigate } from 'react-router-dom';
 import Header from '../components/Header';
 import Sidebar from '../components/Sidebar';
+import LoadingSplash from '../components/LoadingSplash';
 import { useAuth } from '../context/AuthContext';
 
 const FacultyLayout = () => {
@@ -9,11 +10,7 @@ const FacultyLayout = () => {
   const { user, loading } = useAuth();
 
   if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-50 text-slate-600">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#0c2356]"></div>
-      </div>
-    );
+    return <LoadingSplash progress={80} message="Verifying session with database..." />;
   }
 
   if (!user || (user.role !== 'faculty' && user.role !== 'admin')) {
@@ -34,4 +31,3 @@ const FacultyLayout = () => {
 };
 
 export default FacultyLayout;
-

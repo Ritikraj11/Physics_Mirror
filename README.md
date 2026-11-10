@@ -99,7 +99,7 @@ As specified, 6 timed batches are integrated with active/inactive status control
     - **Pending Fee:** ₹5,000 (Vibrant Yellow card)
 - **Your Enrollments**: Course name, assigned batch timing, duration, agreed fee
 - **My Profile**: Personal details, guardian details, address, change password module
-- **My Courses & Lectures**: Video classes by Arun Sir, chapterwise formula PDF sheets, numerical problem sets
+- **My Courses & Notes**: Chapterwise formula PDF sheets, numerical problem sets, and syllabus tracking
 - **Fee Receipts & Dues**: Transaction history with View/Print official receipt modal
 
 ---
@@ -124,7 +124,15 @@ cd frontend && npm run dev
 # Frontend runs on http://localhost:5173
 ```
 
-### 3. Re-seed MongoDB Atlas Database (Optional)
+### 3. Production Deployment & API Endpoint
+- **Live Render Backend:** `https://physics-mirror-api.onrender.com`
+- When deploying the frontend (e.g. to Vercel, Netlify, or Render), configure the environment variable:
+  ```env
+  VITE_API_URL=https://physics-mirror-api.onrender.com
+  ```
+- In local development, the frontend automatically falls back to `https://physics-mirror-api.onrender.com` or whatever is set in `frontend/.env`.
+
+### 4. Re-seed MongoDB Atlas Database (Optional)
 ```bash
 npm run seed
 ```

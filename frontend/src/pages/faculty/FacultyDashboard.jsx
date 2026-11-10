@@ -9,6 +9,7 @@ import {
   CheckCircle,
   Calendar,
   Sparkles,
+  FileUp,
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import api from '../../services/api';
@@ -67,10 +68,17 @@ const FacultyDashboard = () => {
               <span>Mark Today's Attendance</span>
             </Link>
             <Link
+              to="/faculty/dpp"
+              className="px-4 py-2 bg-white/10 hover:bg-white/20 text-[#ffc700] font-semibold text-xs rounded-xl border border-white/20 transition flex items-center space-x-1.5"
+            >
+              <FileUp className="w-4 h-4 text-[#ffc700]" />
+              <span>Upload DPP Sheet</span>
+            </Link>
+            <Link
               to="/faculty/active-batches"
               className="px-4 py-2 bg-white/10 hover:bg-white/20 text-white font-semibold text-xs rounded-xl border border-white/20 transition flex items-center space-x-1.5"
             >
-              <Clock className="w-4 h-4 text-[#ffc700]" />
+              <Clock className="w-4 h-4 text-sky-200" />
               <span>View Active Batches</span>
             </Link>
           </div>

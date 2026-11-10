@@ -101,7 +101,7 @@ const StudentEnrollments = () => {
               <div>
                 <p className="font-bold">Included Privileges:</p>
                 <p className="text-sky-800 mt-0.5">
-                  Full access to Arun Sir's personal doubt desk, weekly numerical drill sheets, monthly All-India mock test rankings, and recorded video archives.
+                  Full access to Arun Sir's personal doubt desk, weekly numerical drill sheets, monthly All-India mock test rankings, and comprehensive formula modules.
                 </p>
               </div>
             </div>

@@ -9,6 +9,7 @@ import {
   Award,
   BookOpen,
   CheckCircle,
+  CheckCircle2,
   GraduationCap,
   Shield,
   UserCheck,
@@ -131,11 +132,11 @@ const LandingPage = () => {
                   <ArrowRight className="w-5 h-5" />
                 </button>
                 <a
-                  href="#youtube"
+                  href="#batches"
                   className="px-7 py-4 bg-transparent hover:bg-white/10 text-white font-bold text-base rounded-2xl border-2 border-white/40 hover:border-white transition flex items-center justify-center space-x-2"
                 >
-                  <Play className="w-4 h-4 text-[#ffc700] fill-[#ffc700]" />
-                  <span>Watch Free Classes</span>
+                  <Clock className="w-4 h-4 text-[#ffc700]" />
+                  <span>Explore Batch Timings</span>
                 </a>
               </div>
 
@@ -640,40 +641,57 @@ const LandingPage = () => {
         </div>
       </section>
 
-      {/* YouTube Classes Section */}
-      <section id="youtube" className="py-20 bg-[#0c2356] text-white">
+      {/* Physics Mirror Methodology Section */}
+      <section id="methodology" className="py-20 bg-[#0c2356] text-white">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-2xl mx-auto mb-12 space-y-2">
             <span className="text-xs font-bold text-[#ffc700] uppercase tracking-wider">
-              FREE LECTURES
+              OUR TEACHING METHODOLOGY
             </span>
-            <h2 className="text-3xl font-black">Experience Arun Sir's Teaching Online</h2>
+            <h2 className="text-3xl font-black">The Proven Arun Sir Learning System</h2>
             <p className="text-sky-200 text-sm">
-              Watch selected concept lectures and see how effortlessly Physics becomes your favorite subject.
+              Structured classroom pedagogy designed to transform complex derivations into natural intuition.
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {[
-              { title: 'Ray Optics: Snell’s Law in 15 Minutes', views: '24K Views', duration: '18:40', tag: 'Class 12th' },
-              { title: 'Rotational Motion: Moment of Inertia Demystified', views: '38K Views', duration: '28:12', tag: 'Class 11th / JEE' },
-              { title: 'Electrostatics: Gauss Law Applications', views: '19K Views', duration: '22:05', tag: 'Class 12th / NEET' },
-            ].map((video, i) => (
-              <div key={i} className="bg-sky-950/60 rounded-2xl overflow-hidden border border-sky-800/60 shadow-lg group">
-                <div className="relative h-44 bg-slate-800 flex items-center justify-center">
-                  <div className="w-14 h-14 rounded-full bg-red-600 text-white flex items-center justify-center shadow-lg group-hover:scale-110 transition">
-                    <Play className="w-6 h-6 fill-white ml-0.5" />
-                  </div>
-                  <span className="absolute bottom-2 right-2 px-2 py-0.5 rounded bg-black/80 text-[10px] font-mono text-white">
-                    {video.duration}
-                  </span>
+              {
+                icon: BookOpen,
+                title: 'Root Concept Visualization',
+                desc: 'Every chapter starts with fundamental physical phenomena before formulas, eliminating rote memorization.',
+                tag: 'Foundation',
+              },
+              {
+                icon: CheckCircle2,
+                title: 'Graded Numerical Drills',
+                desc: 'Step-by-step problem sets categorized from Board level to JEE Advanced & NEET tricky scenarios.',
+                tag: 'Problem Solving',
+              },
+              {
+                icon: Award,
+                title: 'Personal Doubt Desk',
+                desc: 'Arun Sir conducts daily 1-on-1 doubt sessions after every batch so no conceptual confusion remains.',
+                tag: 'Individual Care',
+              },
+            ].map((feature, i) => (
+              <div
+                key={i}
+                className="bg-sky-950/60 rounded-2xl p-6 border border-sky-800/60 shadow-lg space-y-4 hover:border-[#ffc700]/50 transition"
+              >
+                <div className="w-12 h-12 rounded-xl bg-[#ffc700]/10 border border-[#ffc700]/30 text-[#ffc700] flex items-center justify-center">
+                  <feature.icon className="w-6 h-6" />
                 </div>
-                <div className="p-4 space-y-2">
-                  <span className="text-[10px] font-bold text-[#ffc700] uppercase">{video.tag}</span>
-                  <h4 className="text-sm font-bold text-white group-hover:text-[#ffc700] transition line-clamp-1">
-                    {video.title}
+                <div className="space-y-2">
+                  <span className="text-[10px] font-bold text-[#ffc700] uppercase tracking-wider">
+                    {feature.tag}
+                  </span>
+                  <h4 className="text-base font-bold text-white">
+                    {feature.title}
                   </h4>
-                  <p className="text-xs text-sky-300">{video.views} • By Arun Sir</p>
+                  <p className="text-xs text-sky-200 leading-relaxed">
+                    {feature.desc}
+                  </p>
                 </div>
               </div>
             ))}

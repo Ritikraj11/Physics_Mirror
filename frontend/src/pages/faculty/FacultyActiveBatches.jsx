@@ -31,7 +31,7 @@ const FacultyActiveBatches = () => {
           My Active Batches
         </h1>
         <p className="text-xs text-slate-500 mt-0.5">
-          Active teaching sessions, lecture halls, and live student counts
+          Active teaching sessions, classrooms, and live student counts
         </p>
       </div>
 

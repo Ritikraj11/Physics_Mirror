@@ -15,6 +15,7 @@ const courseRoutes = require('./routes/courseRoutes');
 const reportRoutes = require('./routes/reportRoutes');
 const noticeRoutes = require('./routes/noticeRoutes');
 const enquiryRoutes = require('./routes/enquiryRoutes');
+const dppRoutes = require('./routes/dppRoutes');
 
 const { errorHandler } = require('./middleware/errorMiddleware');
 
@@ -74,6 +75,7 @@ app.use('/api/courses', courseRoutes);
 app.use('/api/reports', reportRoutes);
 app.use('/api/notices', noticeRoutes);
 app.use('/api/enquiries', enquiryRoutes);
+app.use('/api/dpp', dppRoutes);
 
 // 404 Handler
 app.use((req, res) => {

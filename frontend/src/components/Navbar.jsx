@@ -60,9 +60,6 @@ const Navbar = () => {
             <a href="#faculty" className="text-sky-100 hover:text-[#ffc700] transition">
               Our Faculty
             </a>
-            <a href="#youtube" className="text-sky-100 hover:text-[#ffc700] transition">
-              YouTube Classes
-            </a>
             <a href="#contact" className="text-sky-100 hover:text-[#ffc700] transition">
               Contact Us
             </a>
@@ -184,13 +181,6 @@ const Navbar = () => {
               className="text-white hover:text-[#ffc700] py-2 px-3"
             >
               Our Faculty
-            </a>
-            <a
-              href="#youtube"
-              onClick={() => setMobileMenuOpen(false)}
-              className="text-white hover:text-[#ffc700] py-2 px-3"
-            >
-              YouTube Classes
             </a>
             <a
               href="#contact"

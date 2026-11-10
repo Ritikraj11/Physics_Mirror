@@ -20,6 +20,7 @@ const Payment = require('../models/Payment');
 const Attendance = require('../models/Attendance');
 const Notice = require('../models/Notice');
 const Enquiry = require('../models/Enquiry');
+const DPP = require('../models/DPP');
 const { connectDB, closeDB } = require('../config/db');
 
 const seedAll = async () => {
@@ -36,6 +37,7 @@ const seedAll = async () => {
     await Attendance.deleteMany({});
     await Notice.deleteMany({});
     await Enquiry.deleteMany({});
+    await DPP.deleteMany({});
 
     console.log('🌱 Seeding Courses...');
     const courses = await Course.insertMany([
@@ -595,6 +597,88 @@ const seedAll = async () => {
         preferredBatchTime: '08:00 AM - 10:00 AM',
         message: 'Want to enroll in NEET Physics foundation batch.',
         status: 'Contacted',
+      },
+    ]);
+
+    console.log('🌱 Seeding Daily Practice Problem (DPP) Sheets...');
+    const dummyPdfData = 'data:application/pdf;base64,JVBERi0xLjQKJcOkw7zDtsOfCjIgMCBvYmoKPDwvTGVuZ3RoIDM0L0ZpbHRlci9GbGF0ZURlY29kZT4+c3RyZWFtCnicS0wuyczPU8gvKslMLslIzFFwTCwuSExOzVFIz03MzUkvys8DAPu2DDgKZW5kc3RyZWFtCmVuZG9iagoxIDAgb2JqCjw8L1R5cGUvUGFnZS9QYXJlbnQgMyAwIFIvQ29udGVudHMgMiAwIFIvTWVkaWFCb3hbMCAwIDU5NSA4NDJdL1Jlc291cmNlczw8L1Byb2NTZXRbL1BERi9UZXh0XT4+Pj4KZW5kb2JqCjMgMCBvYmoKPDwvVHlwZS9QYWdlcy9LaWRzWzEgMCBSXS9Db3VudCAxPj4KZW5kb2JqCjQgMCBvYmoKPDwvVHlwZS9DYXRhbG9nL1BhZ2VzIDMgMCBSPj4KZW5kb2JqCnhyZWYKMCA1CjAwMDAwMDAwMDAgNjU1MzUgZiAKMDAwMDAwMDE2NCAwMDAwMCBuIAowMDAwMDAwMDE1IDAwMDAwIG4gCjAwMDAwMDAyNzEgMDAwMDAgbiAKMDAwMDAwMDMyMiAwMDAwMCBuIAp0cmFpbGVyCjw8L1NpemUgNS9Sb290IDQgMCBSPj4Kc3RhcnR4cmVmCjM3MQolJUVPRgo=';
+
+    await DPP.insertMany([
+      {
+        title: 'Ray Optics: Laws of Refraction, Snell’s Law & Total Internal Reflection (DPP-01)',
+        code: 'DPP-OPT-01',
+        batch: batches[0]._id,
+        batchName: '05:00 AM - 07:00 AM Pratigya Batch',
+        targetClass: '12th',
+        subject: 'Physics',
+        unit: 'Ray Optics & Optical Instruments',
+        totalQuestions: 25,
+        difficulty: 'JEE Mains / NEET',
+        description: 'Complete 25 numerical set covering Snell’s law, critical angle calculations, and glass slab lateral displacement.',
+        dueDate: '2026-11-15',
+        fileName: 'Ray_Optics_DPP_01_SnellsLaw.pdf',
+        fileSize: '3.1 MB',
+        fileData: dummyPdfData,
+        uploadedBy: facultyUser1._id,
+        facultyName: 'Arun Sir',
+        downloadCount: 18,
+      },
+      {
+        title: 'Kinematics 2D: Projectile Motion on Horizontal & Incline Plane (DPP-02)',
+        code: 'DPP-KIN-02',
+        batch: batches[1]._id,
+        batchName: '08:00 AM - 10:00 AM Arjun Batch',
+        targetClass: '11th',
+        subject: 'Physics',
+        unit: 'Kinematics & Motion',
+        totalQuestions: 30,
+        difficulty: 'JEE Mains / NEET',
+        description: '30 high-yield questions on maximum height, range, equation of trajectory, and relative velocity in 2D.',
+        dueDate: '2026-11-16',
+        fileName: 'Kinematics_Projectile_Motion_DPP_02.pdf',
+        fileSize: '2.8 MB',
+        fileData: dummyPdfData,
+        uploadedBy: facultyUser3._id,
+        facultyName: 'Dr. Priya Verma',
+        downloadCount: 14,
+      },
+      {
+        title: 'Electricity: Ohm’s Law, Equivalent Resistance & Kirchhoff’s Rules (DPP-03)',
+        code: 'DPP-ELE-03',
+        batch: batches[2]._id,
+        batchName: '10:30 AM - 12:30 PM Sankalp Batch',
+        targetClass: '10th',
+        subject: 'Physics',
+        unit: 'Current Electricity',
+        totalQuestions: 20,
+        difficulty: 'Easy',
+        description: 'Series and parallel circuit combination numericals with power dissipation calculations for Class 10th board prep.',
+        dueDate: '2026-11-18',
+        fileName: 'Electricity_Circuits_DPP_03.pdf',
+        fileSize: '1.9 MB',
+        fileData: dummyPdfData,
+        uploadedBy: facultyUser2._id,
+        facultyName: 'Er. R. K. Sharma',
+        downloadCount: 11,
+      },
+      {
+        title: 'Gravitation & Kepler’s Laws Numerical Drill Sheet (DPP-04)',
+        code: 'DPP-GRV-04',
+        batch: batches[3]._id,
+        batchName: '03:00 PM - 05:00 PM Lakshya Batch',
+        targetClass: '9th',
+        subject: 'Physics',
+        unit: 'Gravitation',
+        totalQuestions: 15,
+        difficulty: 'Medium',
+        description: 'Universal law of gravitation, variation of g with altitude & depth, and weightlessness questions.',
+        dueDate: '2026-11-20',
+        fileName: 'Gravitation_Fundamentals_DPP_04.pdf',
+        fileSize: '2.2 MB',
+        fileData: dummyPdfData,
+        uploadedBy: facultyUser1._id,
+        facultyName: 'Arun Sir',
+        downloadCount: 9,
       },
     ]);
 

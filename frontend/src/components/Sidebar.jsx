@@ -17,6 +17,7 @@ import {
   CheckCircle,
   LogOut,
   FolderOpen,
+  FileUp,
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
@@ -46,13 +47,14 @@ const Sidebar = ({ role = 'admin', isOpen = true, onClose }) => {
     { name: 'My Students', path: '/faculty/students', icon: Users },
     { name: 'My Assigned Batches', path: '/faculty/assigned-batches', icon: BookMarked },
     { name: 'Manage Attendance', path: '/faculty/attendance', icon: CalendarCheck },
+    { name: 'Upload DPP', path: '/faculty/dpp', icon: FileUp },
   ];
 
   const studentNav = [
     { name: 'Student Dashboard', path: '/student', icon: LayoutDashboard },
     { name: 'Your Enrollments', path: '/student/enrollments', icon: FolderOpen },
     { name: 'My Profile', path: '/student/profile', icon: UserCheck },
-    { name: 'My Courses & Lectures', path: '/student/courses', icon: BookOpen },
+    { name: 'My Courses & DPP', path: '/student/courses', icon: BookOpen },
     { name: 'Fee & Receipts', path: '/student/fees', icon: CreditCard },
   ];
 
