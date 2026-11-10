@@ -1,7 +1,7 @@
 {
   "name": "physics-mirror-institute-management-system",
   "version": "1.0.0",
-  "description": "Production-Grade Institute Management System for Physics Mirror by Arun Sir",
+  "description": "Production-Grade Institute Management System for Physics Mirror",
   "scripts": {
     "start": "node backend/src/server.js",
     "server": "npm run start --prefix backend",

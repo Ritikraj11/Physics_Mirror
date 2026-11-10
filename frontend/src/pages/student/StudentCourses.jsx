@@ -93,7 +93,7 @@ const StudentCourses = () => {
   ];
 
   const studyMaterials = [
-    { title: 'Class 11 & 12 Complete Physics Formula Handbook (Arun Sir Special)', size: '3.4 MB', type: 'PDF' },
+    { title: 'Class 11 & 12 Complete Physics Formula Handbook (Physics Mirror Special)', size: '3.4 MB', type: 'PDF' },
     { title: 'Top 100 High-Yield JEE Mains Mechanics & Electrostatics Numericals', size: '5.1 MB', type: 'PDF' },
     { title: 'NEET Physics 2026 High-Probability Questions with Step-by-Step Solutions', size: '4.8 MB', type: 'PDF' },
     { title: 'Board Exam 5-Mark Derivations Pocketbook (All Verified Proofs)', size: '2.9 MB', type: 'PDF' },
@@ -111,7 +111,7 @@ const StudentCourses = () => {
           </span>
         </h1>
         <p className="text-xs text-slate-500 mt-0.5">
-          Download Daily Practice Problem (DPP) sheets uploaded by Arun Sir & faculty, course syllabus, and formula notes
+          Download Daily Practice Problem (DPP) sheets uploaded by faculty, course syllabus, and formula notes
         </p>
       </div>
 
@@ -132,7 +132,7 @@ const StudentCourses = () => {
               {dpps.length} Available
             </span>
           </div>
-          <span className="text-[11px] text-slate-400">Uploaded by Arun Sir & Faculty</span>
+          <span className="text-[11px] text-slate-400">Uploaded by Faculty</span>
         </div>
 
         {dpps.length === 0 ? (

@@ -38,7 +38,7 @@ const Navbar = () => {
                 <span className="text-[#ffc700] ml-1.5 drop-shadow-[0_2px_4px_rgba(0,0,0,0.4)]">MIRROR</span>
               </div>
               <p className="text-[11px] sm:text-xs font-semibold tracking-widest text-sky-200 uppercase mt-0.5">
-                BY ARUN SIR
+                PREMIER INSTITUTE
               </p>
             </div>
           </Link>
@@ -135,7 +135,7 @@ const Navbar = () => {
                 <div className="text-xl font-black text-white">
                   PHYSICS <span className="text-[#ffc700]">MIRROR</span>
                 </div>
-                <div className="text-xs font-semibold text-sky-200">BY ARUN SIR</div>
+                <div className="text-xs font-semibold text-sky-200">PREMIER INSTITUTE</div>
               </div>
             </div>
             <button

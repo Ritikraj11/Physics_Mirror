@@ -714,7 +714,7 @@ const LandingPage = () => {
                   <div className="text-base font-black">
                     PHYSICS <span className="text-[#ffc700]">MIRROR</span>
                   </div>
-                  <p className="text-[10px] text-sky-200">BY ARUN SIR</p>
+                  <p className="text-[10px] text-sky-200">PREMIER PHYSICS COACHING</p>
                 </div>
               </div>
               <p className="text-slate-400 leading-relaxed">
@@ -782,7 +782,7 @@ const LandingPage = () => {
           </div>
 
           <div className="pt-6 text-center text-xs text-slate-500">
-            <p>© {new Date().getFullYear()} Physics Mirror by Arun Sir. All rights reserved.</p>
+            <p>© {new Date().getFullYear()} Physics Mirror. All rights reserved.</p>
           </div>
         </div>
       </footer>

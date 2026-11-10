@@ -35,7 +35,7 @@ const courseSchema = new mongoose.Schema(
       default: [
         'Concept Clearing Sessions',
         'Weekly Numerical Problem Sheets',
-        'Doubt Solving by Arun Sir',
+        '1-on-1 Faculty Doubt Solving',
         'Mock Tests with All India Ranking',
       ],
     },

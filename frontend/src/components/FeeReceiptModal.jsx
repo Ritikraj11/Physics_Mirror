@@ -51,7 +51,7 @@ const FeeReceiptModal = ({ isOpen, onClose, payment }) => {
                   PHYSICS <span className="text-[#f59e0b]">MIRROR</span>
                 </h1>
                 <p className="text-xs font-bold text-slate-600 tracking-wider uppercase">
-                  BY ARUN SIR • CONCEPT-FIRST COACHING
+                  CONCEPT-FIRST PHYSICS COACHING
                 </p>
                 <p className="text-[10px] text-slate-500">
                   Classes 9th, 10th, 11th, 12th, JEE Mains & NEET • Helpline: +91 98765 43210

@@ -40,7 +40,7 @@ const LoadingSplash = ({ progress = 0, message = 'Fetching data from database...
             <Sparkles className="w-4 h-4 text-[#ffc700]" />
           </div>
           <p className="text-[11px] font-bold text-sky-200 uppercase tracking-widest">
-            BY ARUN SIR • INSTITUTE MANAGEMENT
+            INSTITUTE MANAGEMENT SYSTEM
           </p>
         </div>
 

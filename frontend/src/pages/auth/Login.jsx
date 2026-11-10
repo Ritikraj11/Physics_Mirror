@@ -80,7 +80,7 @@ const Login = () => {
               PHYSICS <span className="text-[#ffc700]">MIRROR</span>
             </div>
             <p className="text-[11px] font-semibold tracking-widest text-sky-200 uppercase mt-0.5">
-              BY ARUN SIR
+              INSTITUTE PORTAL
             </p>
           </div>
         </Link>

@@ -35,7 +35,7 @@ const createCourse = async (req, res, next) => {
       features: features || [
         'Concept Clearing Sessions',
         'Weekly Numerical Problem Sheets',
-        'Doubt Solving by Arun Sir',
+        '1-on-1 Faculty Doubt Solving',
       ],
     });
 
