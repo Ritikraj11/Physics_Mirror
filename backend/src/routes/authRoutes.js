@@ -4,7 +4,7 @@ const { login, getMe, updatePassword, createAdminUser } = require('../controller
 const { protect, authorize } = require('../middleware/authMiddleware');
 const { loginRateLimiter } = require('../middleware/rateLimiter');
 
-router.post('/login', login);
+router.post('/login', loginRateLimiter, login);
 router.get('/me', protect, getMe);
 router.put('/updatepassword', protect, updatePassword);
 router.post('/create-admin', protect, authorize('admin'), createAdminUser);
