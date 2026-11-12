@@ -197,7 +197,7 @@ const StudentDashboard = () => {
               {enrolledCourse?.courseName || 'Class 11th Physics Foundation + NEET'}
             </h4>
             <p className="text-xs text-slate-600">
-              Faculty: <strong>Dr. Priya Verma / Arun Sir</strong> • Hall B
+              Faculty: <strong>Arun Sir</strong> • Hall A
             </p>
             <p className="text-xs text-slate-500">Days: Monday to Saturday</p>
           </div>

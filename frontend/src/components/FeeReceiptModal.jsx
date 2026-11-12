@@ -16,7 +16,7 @@ const FeeReceiptModal = ({ isOpen, onClose, payment }) => {
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
       <div className="bg-white rounded-2xl shadow-2xl max-w-xl w-full overflow-hidden border border-slate-200 animate-in fade-in zoom-in-95 duration-200">
-        
+
         {/* Modal Controls (Hidden in print) */}
         <div className="bg-slate-100 px-6 py-3 flex items-center justify-between border-b border-slate-200 print:hidden">
           <span className="text-xs font-bold text-slate-700">Official Fee Receipt</span>
@@ -39,12 +39,20 @@ const FeeReceiptModal = ({ isOpen, onClose, payment }) => {
 
         {/* Printable Area */}
         <div id="printable-receipt" className="p-8 bg-white text-slate-800">
-          
+
           {/* Institute Header */}
           <div className="flex items-center justify-between border-b-2 border-[#0c2356] pb-4">
             <div className="flex items-center space-x-3.5">
-              <div className="w-14 h-14 rounded-full bg-white p-1 border border-slate-200 shadow-sm flex items-center justify-center">
-                <img src="/logo.png" alt="Physics Mirror" className="w-full h-full object-contain" />
+              <div className="w-14 h-14 rounded-full bg-white p-1 border border-slate-200 shadow-sm flex items-center justify-center overflow-hidden">
+                <img
+                  src="/logo.jpg"
+                  alt="Physics Mirror Logo"
+                  className="w-full h-full object-contain rounded-full"
+                  onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src = '/logo.png';
+                  }}
+                />
               </div>
               <div>
                 <h1 className="text-xl font-black tracking-tight text-[#0c2356]">
@@ -54,7 +62,7 @@ const FeeReceiptModal = ({ isOpen, onClose, payment }) => {
                   CONCEPT-FIRST PHYSICS COACHING
                 </p>
                 <p className="text-[10px] text-slate-500">
-                  Classes 9th, 10th, 11th, 12th, JEE Mains & NEET • Helpline: +91 98765 43210
+                  Pipradi, Jhajha, District – Jamui, Bihar, India • Helpline: +91 98765 43210
                 </p>
               </div>
             </div>
@@ -136,7 +144,7 @@ const FeeReceiptModal = ({ isOpen, onClose, payment }) => {
               <div className="w-24 border-b border-slate-400 mb-1 mx-auto"></div>
               <p className="text-[11px] font-bold text-[#0c2356]">ARUN SIR</p>
               <p className="text-[9px] text-slate-500 font-medium">Founder & Director</p>
-              <p className="text-[9px] text-slate-400">Physics Mirror</p>
+              <p className="text-[9px] text-slate-400">Physics Mirror • Pipradi, Jhajha, Jamui, Bihar</p>
             </div>
           </div>
 

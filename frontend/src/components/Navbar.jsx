@@ -18,17 +18,17 @@ const Navbar = () => {
     <header className="sticky top-0 z-50 bg-[#0c2356] text-white shadow-md border-b border-[#163b96]/40">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
-          
+
           {/* Brand Logo & Title */}
           <Link to="/" className="flex items-center space-x-3.5 group">
-            <div className="relative w-12 h-12 rounded-full bg-white p-1 shadow-md flex items-center justify-center transition-transform group-hover:scale-105">
+            <div className="relative w-12 h-12 rounded-full bg-white p-1 shadow-md flex items-center justify-center transition-transform group-hover:scale-105 overflow-hidden border border-slate-100">
               <img
-                src="/logo.png"
+                src="/logo.jpg"
                 alt="Physics Mirror Logo"
-                className="w-full h-full object-contain"
+                className="w-full h-full object-contain rounded-full"
                 onError={(e) => {
                   e.target.onerror = null;
-                  e.target.src = 'https://cdn-icons-png.flflaticon.com/512/3067/3067260.png';
+                  e.target.src = '/logo.png';
                 }}
               />
             </div>
@@ -44,7 +44,7 @@ const Navbar = () => {
           </Link>
 
           {/* Desktop Navigation Links */}
-          <nav className="hidden md:flex items-center space-x-7 text-sm font-medium">
+          <nav className="hidden md:flex items-center space-x-6 text-sm font-medium">
             <Link to="/" className="text-white hover:text-[#ffc700] transition">
               Home
             </Link>
@@ -58,10 +58,13 @@ const Navbar = () => {
               Batches
             </a>
             <a href="#faculty" className="text-sky-100 hover:text-[#ffc700] transition">
-              Our Faculty
+              Arun Sir
+            </a>
+            <a href="#visit" className="text-[#ffc700] font-semibold hover:text-white transition">
+              Visit Institute
             </a>
             <a href="#contact" className="text-sky-100 hover:text-[#ffc700] transition">
-              Contact Us
+              Contact
             </a>
           </nav>
 
@@ -128,8 +131,16 @@ const Navbar = () => {
         <div className="fixed inset-0 z-50 bg-[#0c2356]/95 backdrop-blur-md flex flex-col p-6 animate-in slide-in-from-right duration-200">
           <div className="flex items-center justify-between pb-6 border-b border-sky-800/60">
             <div className="flex items-center space-x-3">
-              <div className="w-12 h-12 rounded-full bg-white p-1">
-                <img src="/logo.png" alt="PM" className="w-full h-full object-contain" />
+              <div className="w-12 h-12 rounded-full bg-white p-1 overflow-hidden shadow-md flex items-center justify-center">
+                <img
+                  src="/logo.jpg"
+                  alt="PM"
+                  className="w-full h-full object-contain rounded-full"
+                  onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src = '/logo.png';
+                  }}
+                />
               </div>
               <div>
                 <div className="text-xl font-black text-white">
@@ -180,7 +191,14 @@ const Navbar = () => {
               onClick={() => setMobileMenuOpen(false)}
               className="text-white hover:text-[#ffc700] py-2 px-3"
             >
-              Our Faculty
+              Arun Sir (Faculty)
+            </a>
+            <a
+              href="#visit"
+              onClick={() => setMobileMenuOpen(false)}
+              className="text-[#ffc700] font-bold hover:text-white py-2 px-3 bg-white/5 rounded-lg"
+            >
+              Visit Institute (Jhajha)
             </a>
             <a
               href="#contact"

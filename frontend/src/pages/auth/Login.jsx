@@ -68,12 +68,20 @@ const Login = () => {
 
   return (
     <div className="min-h-screen bg-[#0c2356] bg-grid-pattern text-white flex flex-col justify-between p-4 sm:p-6 font-sans">
-      
+
       {/* Top Header - Matches WhatsApp Screenshot */}
       <div className="max-w-md w-full mx-auto flex items-center justify-between pb-6 pt-2">
         <Link to="/" className="flex items-center space-x-3 group">
-          <div className="w-12 h-12 rounded-full bg-white p-1 shadow-md flex items-center justify-center">
-            <img src="/logo.png" alt="Physics Mirror" className="w-full h-full object-contain" />
+          <div className="w-12 h-12 rounded-full bg-white p-1 shadow-md flex items-center justify-center overflow-hidden border border-slate-100">
+            <img
+              src="/logo.jpg"
+              alt="Physics Mirror Logo"
+              className="w-full h-full object-contain rounded-full"
+              onError={(e) => {
+                e.target.onerror = null;
+                e.target.src = '/logo.png';
+              }}
+            />
           </div>
           <div>
             <div className="text-xl font-black tracking-tight leading-none">
@@ -96,17 +104,16 @@ const Login = () => {
 
       {/* Main Card (Matches WhatsApp Image 2026-11-08 at 9.13.23 AM.jpeg & .24 AM.jpeg) */}
       <div className="max-w-md w-full mx-auto my-auto">
-        
+
         {/* Role Tabs */}
         <div className="flex bg-[#07173b]/90 p-1.5 rounded-2xl mb-4 border border-sky-400/20 shadow-lg">
           <button
             type="button"
             onClick={() => handleRoleSwitch('student')}
-            className={`flex-1 py-2.5 rounded-xl text-xs font-bold transition flex items-center justify-center space-x-1.5 ${
-              activeRole === 'student'
+            className={`flex-1 py-2.5 rounded-xl text-xs font-bold transition flex items-center justify-center space-x-1.5 ${activeRole === 'student'
                 ? 'bg-[#ffc700] text-[#0c2356] shadow-md'
                 : 'text-slate-300 hover:text-white'
-            }`}
+              }`}
           >
             <GraduationCap className="w-4 h-4" />
             <span>Student</span>
@@ -114,11 +121,10 @@ const Login = () => {
           <button
             type="button"
             onClick={() => handleRoleSwitch('faculty')}
-            className={`flex-1 py-2.5 rounded-xl text-xs font-bold transition flex items-center justify-center space-x-1.5 ${
-              activeRole === 'faculty'
+            className={`flex-1 py-2.5 rounded-xl text-xs font-bold transition flex items-center justify-center space-x-1.5 ${activeRole === 'faculty'
                 ? 'bg-[#ffc700] text-[#0c2356] shadow-md'
                 : 'text-slate-300 hover:text-white'
-            }`}
+              }`}
           >
             <UserCheck className="w-4 h-4" />
             <span>Faculty</span>
@@ -126,11 +132,10 @@ const Login = () => {
           <button
             type="button"
             onClick={() => handleRoleSwitch('admin')}
-            className={`flex-1 py-2.5 rounded-xl text-xs font-bold transition flex items-center justify-center space-x-1.5 ${
-              activeRole === 'admin'
+            className={`flex-1 py-2.5 rounded-xl text-xs font-bold transition flex items-center justify-center space-x-1.5 ${activeRole === 'admin'
                 ? 'bg-[#ffc700] text-[#0c2356] shadow-md'
                 : 'text-slate-300 hover:text-white'
-            }`}
+              }`}
           >
             <Shield className="w-4 h-4" />
             <span>Admin</span>
@@ -139,7 +144,7 @@ const Login = () => {
 
         {/* White Card */}
         <div className="bg-white rounded-3xl p-6 sm:p-8 text-slate-800 shadow-2xl border border-slate-100">
-          
+
           {/* Header Icon + Sign In title */}
           <div className="flex items-center space-x-3.5 mb-6">
             <div className="w-12 h-12 rounded-full bg-[#0c2356] text-[#ffc700] flex items-center justify-center shadow-md">
@@ -174,8 +179,8 @@ const Login = () => {
                 {activeRole === 'student'
                   ? 'STUDENT ID / MOBILE / EMAIL'
                   : activeRole === 'faculty'
-                  ? 'FACULTY ID / EMAIL'
-                  : 'ADMIN EMAIL'}
+                    ? 'FACULTY ID / EMAIL'
+                    : 'ADMIN EMAIL'}
               </label>
               <input
                 type="text"
@@ -186,8 +191,8 @@ const Login = () => {
                   activeRole === 'student'
                     ? 'e.g. PM26009 or 9876543209'
                     : activeRole === 'faculty'
-                    ? 'e.g. arunsir@physicsmirror.com'
-                    : 'admin@physicsmirror.com'
+                      ? 'e.g. arunsir@physicsmirror.com'
+                      : 'admin@physicsmirror.com'
                 }
                 className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 font-medium text-sm focus:ring-2 focus:ring-[#0c2356] focus:border-transparent outline-none transition"
               />

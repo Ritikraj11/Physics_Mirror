@@ -20,6 +20,10 @@ import {
   ChevronRight,
   Calendar,
   Zap,
+  Navigation,
+  Compass,
+  Building,
+  ExternalLink,
 } from 'lucide-react';
 import Navbar from '../components/Navbar';
 import api from '../services/api';
@@ -90,10 +94,10 @@ const LandingPage = () => {
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center sm:text-left">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-            
+
             {/* Left Column (Hero Content) */}
             <div className="lg:col-span-7 space-y-6">
-              
+
               {/* Badge (Matches WhatsApp Image 2026-11-08 at 9.13.21 AM.jpeg) */}
               <div className="inline-flex items-center space-x-2 px-4 py-1.5 rounded-full bg-[#183980]/80 border border-[#ffc700]/30 text-xs sm:text-sm font-semibold text-[#ffc700] shadow-sm">
                 <Sparkles className="w-4 h-4 text-[#ffc700]" />
@@ -160,11 +164,19 @@ const LandingPage = () => {
             {/* Right Column (Hero Visual Card & Direct Portals) */}
             <div className="lg:col-span-5">
               <div className="relative bg-gradient-to-br from-[#122e6b] to-[#081738] p-6 sm:p-8 rounded-3xl border border-sky-400/20 shadow-2xl space-y-6">
-                
+
                 {/* Visual Header */}
                 <div className="flex items-center space-x-4 pb-4 border-b border-sky-400/20">
-                  <div className="w-16 h-16 rounded-2xl bg-white p-2 shadow-md flex items-center justify-center">
-                    <img src="/logo.png" alt="PM" className="w-full h-full object-contain" />
+                  <div className="w-16 h-16 rounded-2xl bg-white p-1.5 shadow-md flex items-center justify-center overflow-hidden">
+                    <img
+                      src="/logo.jpg"
+                      alt="Physics Mirror Logo"
+                      className="w-full h-full object-contain rounded-xl"
+                      onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.src = '/logo.png';
+                      }}
+                    />
                   </div>
                   <div>
                     <h3 className="text-xl font-black text-white">
@@ -240,7 +252,7 @@ const LandingPage = () => {
       {/* 4 Key Statistics Box - Matches WhatsApp Image 2026-11-08 at 9.13.22 AM.jpeg */}
       <section className="relative z-20 -mt-10 sm:-mt-14 max-w-6xl mx-auto px-4 sm:px-6 w-full">
         <div className="bg-white rounded-3xl shadow-xl border border-slate-200/80 p-6 sm:p-8 grid grid-cols-2 lg:grid-cols-4 gap-6 text-center divide-y lg:divide-y-0 lg:divide-x divide-slate-100">
-          
+
           <div className="pt-4 lg:pt-0">
             <h3 className="text-3xl sm:text-4xl font-black text-[#0c2356]">10+</h3>
             <p className="text-xs sm:text-sm font-semibold text-slate-500 mt-1">Years of teaching</p>
@@ -268,7 +280,7 @@ const LandingPage = () => {
       <section id="about" className="py-20 sm:py-28 bg-[#f8fafc]">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-            
+
             <div className="lg:col-span-7 space-y-6">
               <div className="inline-flex items-center space-x-2 text-xs font-bold uppercase tracking-widest text-slate-500">
                 <span className="w-2.5 h-2.5 rounded-full bg-[#ffc700]"></span>
@@ -336,7 +348,7 @@ const LandingPage = () => {
       {/* Batches Section (Specifically 6 Batches by Time and Name from Prompt!) */}
       <section id="batches" className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          
+
           <div className="text-center max-w-3xl mx-auto mb-14 space-y-3">
             <span className="text-xs font-bold tracking-widest uppercase text-[#163b96] bg-sky-50 px-3 py-1 rounded-full border border-sky-100">
               TIMETABLE & BATCHES
@@ -350,7 +362,7 @@ const LandingPage = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            
+
             {/* Batch 1: 5am - 7am Pratigya Batch */}
             <div className="bg-[#f8fafc] rounded-2xl p-6 border-2 border-slate-200 hover:border-[#163b96] hover:shadow-lg transition relative flex flex-col justify-between">
               <div>
@@ -403,7 +415,7 @@ const LandingPage = () => {
                   Foundational mechanics, vectors, heat and thermodynamics with NCERT line-by-line decoding and medical question patterns.
                 </p>
                 <div className="mt-4 pt-4 border-t border-slate-200/60 text-xs text-slate-500 space-y-1">
-                  <p>👨‍🏫 Faculty: <span className="font-bold text-slate-800">Dr. Priya Verma</span></p>
+                  <p>👨‍🏫 Faculty: <span className="font-bold text-slate-800">Arun Sir</span></p>
                   <p>🏢 Room: Hall B (Newton Hall)</p>
                   <p>📅 Days: Monday – Saturday</p>
                 </div>
@@ -437,7 +449,7 @@ const LandingPage = () => {
                   Targeting 100/100 in Board examinations with strong Olympiad fundamentals (Electricity, Optics & Magnetic effects).
                 </p>
                 <div className="mt-4 pt-4 border-t border-slate-200/60 text-xs text-slate-500 space-y-1">
-                  <p>👨‍🏫 Faculty: <span className="font-bold text-slate-800">Er. R. K. Sharma</span></p>
+                  <p>👨‍🏫 Faculty: <span className="font-bold text-slate-800">Arun Sir</span></p>
                   <p>🏢 Room: Hall C (Feynman Lab)</p>
                   <p>📅 Days: Mon, Wed, Fri</p>
                 </div>
@@ -505,7 +517,7 @@ const LandingPage = () => {
                   Evening crash and revision batch emphasizing derivations, circuit problems, optical instruments, and scoring techniques.
                 </p>
                 <div className="mt-4 pt-4 border-t border-slate-200/60 text-xs text-slate-500 space-y-1">
-                  <p>👨‍🏫 Faculty: <span className="font-bold text-slate-800">Er. R. K. Sharma</span></p>
+                  <p>👨‍🏫 Faculty: <span className="font-bold text-slate-800">Arun Sir</span></p>
                   <p>🏢 Room: Hall B (Newton Hall)</p>
                   <p>📅 Days: Monday – Saturday</p>
                 </div>
@@ -560,7 +572,7 @@ const LandingPage = () => {
       {/* Courses Offered Section */}
       <section id="courses" className="py-20 bg-[#f8fafc]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          
+
           <div className="text-center max-w-3xl mx-auto mb-14 space-y-3">
             <span className="text-xs font-bold tracking-widest uppercase text-[#163b96] bg-sky-100 px-3 py-1 rounded-full">
               TARGET PROGRAMS
@@ -699,16 +711,281 @@ const LandingPage = () => {
         </div>
       </section>
 
+      {/* Faculty Section - Sole Master Faculty (Arun Sir) */}
+      <section id="faculty" className="py-20 bg-slate-50 border-b border-slate-200">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center max-w-2xl mx-auto mb-14 space-y-3">
+            <span className="text-xs font-bold text-[#163b96] uppercase tracking-widest bg-sky-100 px-3 py-1 rounded-full border border-sky-200">
+              MEET YOUR MENTOR
+            </span>
+            <h2 className="text-3xl sm:text-4xl font-black text-[#0c2356]">
+              Mentored Exclusively by Arun Sir
+            </h2>
+            <p className="text-slate-600 text-sm sm:text-base">
+              At Physics Mirror, every single lecture, doubt desk, and batch is taken personally by Arun Sir — 100% direct mentorship with zero junior lecturers.
+            </p>
+          </div>
+
+          <div className="bg-white rounded-3xl p-8 sm:p-10 border border-slate-200/80 shadow-xl grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+            {/* Arun Sir Profile Card */}
+            <div className="lg:col-span-5 flex flex-col items-center text-center p-6 bg-gradient-to-br from-[#0c2356] to-[#163b96] text-white rounded-2xl shadow-lg relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-[#ffc700]/10 rounded-full blur-2xl"></div>
+
+              <div className="relative w-28 h-28 rounded-full bg-white p-1 shadow-2xl mb-4 border-2 border-[#ffc700] overflow-hidden">
+                <img
+                  src="/logo.jpg"
+                  alt="Physics Mirror Logo"
+                  className="w-full h-full object-contain rounded-full"
+                  onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src = '/logo.png';
+                  }}
+                />
+              </div>
+
+              <span className="px-3 py-1 bg-[#ffc700] text-[#0c2356] text-xs font-extrabold rounded-full uppercase tracking-wider mb-2">
+                Solo Master Mentor
+              </span>
+              <h3 className="text-2xl font-black text-white">Arun Sir</h3>
+              <p className="text-xs text-sky-200 font-semibold mt-1">Founder, Director & Physics Faculty</p>
+              <p className="text-xs text-slate-300 mt-2 font-mono">M.Sc. Physics (Gold Medalist)</p>
+
+              <div className="w-full mt-6 pt-4 border-t border-sky-400/20 grid grid-cols-2 gap-3 text-center">
+                <div className="bg-white/10 rounded-xl p-2.5">
+                  <p className="text-lg font-black text-[#ffc700]">10+ Yrs</p>
+                  <p className="text-[10px] text-sky-200">Teaching Experience</p>
+                </div>
+                <div className="bg-white/10 rounded-xl p-2.5">
+                  <p className="text-lg font-black text-[#ffc700]">2500+</p>
+                  <p className="text-[10px] text-sky-200">Students Guided</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Arun Sir Teaching Edge Details */}
+            <div className="lg:col-span-7 space-y-6">
+              <div className="space-y-2">
+                <span className="text-xs font-bold text-[#163b96] uppercase tracking-wider">
+                  WHY DIRECT TEACHING MATTERS
+                </span>
+                <h4 className="text-xl sm:text-2xl font-bold text-[#0c2356]">
+                  No Outsourced Teaching. Pure Physics Mastery.
+                </h4>
+                <p className="text-sm text-slate-600 leading-relaxed">
+                  Unlike corporate institutes where famous teachers appear only on billboards while inexperienced assistants take classes, <strong>Arun Sir teaches all 6 batches personally</strong> from first concept to final revision.
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="p-4 rounded-xl bg-sky-50/70 border border-sky-100 space-y-1.5">
+                  <div className="flex items-center space-x-2 text-[#0c2356] font-bold text-sm">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                    <span>All 6 Batches Personal</span>
+                  </div>
+                  <p className="text-xs text-slate-600">
+                    5 AM morning batch to 8 PM night series — every lecture delivered directly by Arun Sir.
+                  </p>
+                </div>
+
+                <div className="p-4 rounded-xl bg-sky-50/70 border border-sky-100 space-y-1.5">
+                  <div className="flex items-center space-x-2 text-[#0c2356] font-bold text-sm">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                    <span>Daily 1-on-1 Doubt Desk</span>
+                  </div>
+                  <p className="text-xs text-slate-600">
+                    Face-to-face personal clearing of complex numericals, derivations, and DPP questions every day.
+                  </p>
+                </div>
+
+                <div className="p-4 rounded-xl bg-sky-50/70 border border-sky-100 space-y-1.5">
+                  <div className="flex items-center space-x-2 text-[#0c2356] font-bold text-sm">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                    <span>Hand-Crafted DPP Sets</span>
+                  </div>
+                  <p className="text-xs text-slate-600">
+                    Curated practice problem sets graded from Board to JEE Advanced & NEET top percentile levels.
+                  </p>
+                </div>
+
+                <div className="p-4 rounded-xl bg-sky-50/70 border border-sky-100 space-y-1.5">
+                  <div className="flex items-center space-x-2 text-[#0c2356] font-bold text-sm">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                    <span>Consistent Mentorship</span>
+                  </div>
+                  <p className="text-xs text-slate-600">
+                    Your progress, tests, and attendance are tracked directly by Arun Sir for guaranteed growth.
+                  </p>
+                </div>
+              </div>
+
+              <div className="pt-2">
+                <button
+                  onClick={() => setEnquiryModalOpen(true)}
+                  className="px-6 py-3 bg-[#0c2356] hover:bg-[#163b96] text-white text-xs font-bold rounded-xl shadow-md transition flex items-center space-x-2"
+                >
+                  <span>Talk with Arun Sir for Admission</span>
+                  <ArrowRight className="w-4 h-4 text-[#ffc700]" />
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Visit Our Institute Section (Exact Address & Directions Requested by User) */}
+      <section id="visit" className="py-20 bg-white">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center max-w-2xl mx-auto mb-12 space-y-3">
+            <span className="text-xs font-bold text-[#163b96] uppercase tracking-widest bg-amber-50 text-amber-900 border border-amber-200 px-3.5 py-1 rounded-full">
+              OFFLINE CAMPUS & DIRECT ADMISSION
+            </span>
+            <h2 className="text-3xl sm:text-4xl font-black text-[#0c2356]">
+              Visit Our Institute
+            </h2>
+            <p className="text-slate-600 text-sm sm:text-base">
+              Step into our classroom for admissions, offline batch counseling, and personal study guidance.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+            {/* Main Address Card */}
+            <div className="lg:col-span-7 bg-[#0c2356] text-white rounded-3xl p-8 sm:p-10 shadow-xl space-y-6 flex flex-col justify-between relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-48 h-48 bg-[#ffc700]/10 rounded-full blur-3xl pointer-events-none"></div>
+
+              <div className="space-y-4 relative z-10">
+                <div className="inline-flex items-center space-x-2 px-3 py-1 bg-white/10 rounded-full text-xs font-bold text-[#ffc700]">
+                  <Building className="w-3.5 h-3.5" />
+                  <span>HEADQUARTERS & CLASSROOMS</span>
+                </div>
+
+                <div>
+                  <h3 className="text-2xl sm:text-3xl font-black text-white tracking-wide">
+                    PHYSICS <span className="text-[#ffc700]">MIRROR</span>
+                  </h3>
+                  <p className="text-sm font-semibold text-sky-200 mt-1">
+                    Pipradi, Jhajha, District – Jamui, Bihar, India.
+                  </p>
+                </div>
+
+                <div className="pt-3 border-t border-sky-400/20 space-y-3">
+                  <div className="flex items-start space-x-3">
+                    <Navigation className="w-5 h-5 text-[#ffc700] flex-shrink-0 mt-0.5" />
+                    <div>
+                      <h4 className="text-xs font-bold text-white uppercase tracking-wider">
+                        Location & Directions
+                      </h4>
+                      <p className="text-xs text-sky-100 leading-relaxed mt-1">
+                        Located approximately <strong>100 metres west of Sadar Hospital, Jhajha</strong>, and approximately <strong>20 metres east of the residence of Former MLA Dr. Ravindra Yadav</strong>, along the same road.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start space-x-3 pt-2">
+                    <Compass className="w-5 h-5 text-emerald-400 flex-shrink-0 mt-0.5" />
+                    <div>
+                      <h4 className="text-xs font-bold text-white uppercase tracking-wider">
+                        Find Us Easily
+                      </h4>
+                      <p className="text-xs text-sky-100 font-semibold mt-1">
+                        Pipradi, Jhajha, Jamui, Bihar.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="pt-6 border-t border-sky-400/20 flex flex-col sm:flex-row items-stretch sm:items-center space-y-3 sm:space-y-0 sm:space-x-4 relative z-10">
+                <a
+                  href="https://www.google.com/maps/search/?api=1&query=Pipradi,+Jhajha,+Jamui,+Bihar"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-6 py-3 bg-[#ffc700] hover:bg-[#eeb900] text-[#0c2356] font-bold text-xs rounded-xl shadow-md transition flex items-center justify-center space-x-2"
+                >
+                  <MapPin className="w-4 h-4" />
+                  <span>Open in Google Maps</span>
+                  <ExternalLink className="w-3.5 h-3.5" />
+                </a>
+
+                <a
+                  href="tel:+919876543210"
+                  className="px-5 py-3 bg-white/10 hover:bg-white/20 text-white font-semibold text-xs rounded-xl border border-white/20 transition flex items-center justify-center space-x-2"
+                >
+                  <Phone className="w-3.5 h-3.5 text-[#ffc700]" />
+                  <span>Call Us: +91 98765 43210</span>
+                </a>
+              </div>
+            </div>
+
+            {/* Quick Visit Details Card */}
+            <div className="lg:col-span-5 bg-slate-50 border border-slate-200 rounded-3xl p-6 sm:p-8 space-y-6 flex flex-col justify-between">
+              <div className="space-y-4">
+                <h4 className="text-base font-bold text-[#0c2356] flex items-center space-x-2">
+                  <Clock className="w-4 h-4 text-[#163b96]" />
+                  <span>Visiting & Counseling Hours</span>
+                </h4>
+
+                <div className="space-y-2.5 text-xs text-slate-600">
+                  <div className="flex justify-between p-2.5 bg-white rounded-xl border border-slate-200">
+                    <span className="font-semibold text-slate-800">Monday – Saturday</span>
+                    <span className="font-bold text-[#0c2356]">06:00 AM – 08:30 PM</span>
+                  </div>
+                  <div className="flex justify-between p-2.5 bg-white rounded-xl border border-slate-200">
+                    <span className="font-semibold text-slate-800">Sunday</span>
+                    <span className="font-bold text-amber-700">08:00 AM – 01:00 PM</span>
+                  </div>
+                </div>
+
+                <div className="pt-2 space-y-3">
+                  <h5 className="text-xs font-bold text-slate-800 uppercase tracking-wider">
+                    Key Landmarks Nearby
+                  </h5>
+                  <ul className="text-xs text-slate-600 space-y-2">
+                    <li className="flex items-center space-x-2">
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#163b96]"></span>
+                      <span><strong>Sadar Hospital, Jhajha</strong> (100 metres east of institute)</span>
+                    </li>
+                    <li className="flex items-center space-x-2">
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#163b96]"></span>
+                      <span><strong>Residence of Former MLA Dr. Ravindra Yadav</strong> (20m west)</span>
+                    </li>
+                    <li className="flex items-center space-x-2">
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#163b96]"></span>
+                      <span>Located along main connecting road in Pipradi, Jhajha</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+
+              <button
+                onClick={() => setEnquiryModalOpen(true)}
+                className="w-full py-3 bg-[#0c2356] hover:bg-[#163b96] text-white font-bold text-xs rounded-xl shadow transition text-center"
+              >
+                Schedule an In-Person Campus Visit
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Footer */}
       <footer id="contact" className="bg-[#07173b] text-white pt-16 pb-12 border-t border-sky-900/60">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 pb-12 border-b border-sky-900/60 text-xs">
-            
+
             {/* Col 1 */}
             <div className="space-y-4">
               <div className="flex items-center space-x-3">
-                <div className="w-10 h-10 rounded-full bg-white p-1">
-                  <img src="/logo.png" alt="PM" className="w-full h-full object-contain" />
+                <div className="w-12 h-12 rounded-full bg-white p-1 overflow-hidden flex items-center justify-center shadow-md">
+                  <img
+                    src="/logo.jpg"
+                    alt="Physics Mirror Logo"
+                    className="w-full h-full object-contain rounded-full"
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src = '/logo.png';
+                    }}
+                  />
                 </div>
                 <div>
                   <div className="text-base font-black">
@@ -748,7 +1025,7 @@ const LandingPage = () => {
                 <li>
                   <Link to="/login?role=faculty" className="text-sky-300 hover:underline flex items-center space-x-1.5">
                     <UserCheck className="w-3.5 h-3.5" />
-                    <span>Faculty Login (Arun Sir / Teacher)</span>
+                    <span>Faculty Login (Arun Sir / Master)</span>
                   </Link>
                 </li>
                 <li>
@@ -760,11 +1037,22 @@ const LandingPage = () => {
               </ul>
             </div>
 
-            {/* Col 4 */}
+            {/* Col 4 - Visit Our Institute Address */}
             <div className="space-y-3">
-              <h4 className="text-sm font-bold text-white uppercase tracking-wider">Contact & Address</h4>
+              <h4 className="text-sm font-bold text-white uppercase tracking-wider">Visit Our Institute</h4>
               <div className="space-y-2 text-slate-300">
-                <p className="flex items-center space-x-2">
+                <p className="font-bold text-white tracking-wide">PHYSICS MIRROR</p>
+                <p className="flex items-start space-x-2">
+                  <MapPin className="w-4 h-4 text-[#ffc700] mt-0.5 flex-shrink-0" />
+                  <span className="leading-snug">Pipradi, Jhajha,<br />District – Jamui, Bihar, India.</span>
+                </p>
+                <p className="text-[11px] text-slate-400 pl-6 leading-relaxed">
+                  ~100m West of Sadar Hospital, Jhajha & ~20m East of Former MLA Dr. Ravindra Yadav's residence.
+                </p>
+                <p className="text-xs text-[#ffc700] pl-6 font-semibold">
+                  Find Us Easily – Pipradi, Jhajha, Jamui, Bihar.
+                </p>
+                <p className="flex items-center space-x-2 pt-1">
                   <Phone className="w-3.5 h-3.5 text-[#ffc700]" />
                   <span>+91 98765 43210</span>
                 </p>
@@ -772,17 +1060,13 @@ const LandingPage = () => {
                   <Mail className="w-3.5 h-3.5 text-[#ffc700]" />
                   <span>contact@physicsmirror.com</span>
                 </p>
-                <p className="flex items-start space-x-2">
-                  <MapPin className="w-3.5 h-3.5 text-[#ffc700] mt-0.5 flex-shrink-0" />
-                  <span>Physics Mirror Campus, Near Science Square, City Center</span>
-                </p>
               </div>
             </div>
 
           </div>
 
           <div className="pt-6 text-center text-xs text-slate-500">
-            <p>© {new Date().getFullYear()} Physics Mirror. All rights reserved.</p>
+            <p>© {new Date().getFullYear()} Physics Mirror. Pipradi, Jhajha, Jamui, Bihar. All rights reserved.</p>
           </div>
         </div>
       </footer>
@@ -794,7 +1078,7 @@ const LandingPage = () => {
             <div className="flex items-center justify-between border-b pb-3">
               <div>
                 <h3 className="text-base font-bold text-[#0c2356]">Admission Enquiry</h3>
-                <p className="text-xs text-slate-500">Physics Mirror • Arun Sir</p>
+                <p className="text-xs text-slate-500">Pipradi, Jhajha, Jamui, Bihar • Mentored by Arun Sir</p>
               </div>
               <button onClick={() => setEnquiryModalOpen(false)} className="text-slate-400 hover:text-slate-700">
                 ✕

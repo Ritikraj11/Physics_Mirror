@@ -115,61 +115,17 @@ const seedAll = async () => {
       phone: '9876543210',
     });
 
-    const facultyUser2 = await User.create({
-      name: 'Er. R. K. Sharma',
-      email: 'rksharma@physicsmirror.com',
-      password: 'faculty123',
-      role: 'faculty',
-      facultyId: 'FAC-RKS-02',
-      phone: '9876543211',
-    });
-
-    const facultyUser3 = await User.create({
-      name: 'Dr. Priya Verma',
-      email: 'priya.verma@physicsmirror.com',
-      password: 'faculty123',
-      role: 'faculty',
-      facultyId: 'FAC-PRV-03',
-      phone: '9876543212',
-    });
-
-    console.log('🌱 Seeding Faculty Profiles...');
+    console.log('🌱 Seeding Faculty Profile (Arun Sir - Solo Master Faculty)...');
     const faculty1 = await Faculty.create({
       user: facultyUser1._id,
       facultyId: 'FAC-ARUN-01',
       name: 'Arun Sir',
       email: 'arunsir@physicsmirror.com',
       phone: '9876543210',
-      designation: 'Founder & Lead Physics Faculty',
+      designation: 'Founder, Director & Master Physics Faculty',
       qualification: 'M.Sc. Physics (Gold Medalist), 10+ Years Experience',
-      specialization: 'Electrodynamics, Optics & Modern Physics',
+      specialization: 'Mechanics, Electrodynamics, Optics & Modern Physics',
       experience: '10+ Years',
-      status: 'Active',
-    });
-
-    const faculty2 = await Faculty.create({
-      user: facultyUser2._id,
-      facultyId: 'FAC-RKS-02',
-      name: 'Er. R. K. Sharma',
-      email: 'rksharma@physicsmirror.com',
-      phone: '9876543211',
-      designation: 'Senior Faculty (JEE Advanced)',
-      qualification: 'B.Tech IIT Roorkee, Ex-Kota Faculty',
-      specialization: 'Mechanics & Thermodynamics',
-      experience: '8+ Years',
-      status: 'Active',
-    });
-
-    const faculty3 = await Faculty.create({
-      user: facultyUser3._id,
-      facultyId: 'FAC-PRV-03',
-      name: 'Dr. Priya Verma',
-      email: 'priya.verma@physicsmirror.com',
-      phone: '9876543212',
-      designation: 'Senior Faculty (NEET Specialist)',
-      qualification: 'Ph.D. Applied Physics',
-      specialization: 'Waves, Oscillations & Electrostatics',
-      experience: '7+ Years',
       status: 'Active',
     });
 
@@ -200,8 +156,8 @@ const seedAll = async () => {
         targetClass: 'Class 11th + NEET',
         course: courses[1]._id,
         courseName: courses[1].name,
-        faculty: faculty3._id,
-        facultyName: 'Dr. Priya Verma',
+        faculty: faculty1._id,
+        facultyName: 'Arun Sir',
         days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
         room: 'Hall B - Newton Hall',
         capacity: 40,
@@ -217,8 +173,8 @@ const seedAll = async () => {
         targetClass: 'Class 10th Foundation',
         course: courses[2]._id,
         courseName: courses[2].name,
-        faculty: faculty2._id,
-        facultyName: 'Er. R. K. Sharma',
+        faculty: faculty1._id,
+        facultyName: 'Arun Sir',
         days: ['Mon', 'Wed', 'Fri'],
         room: 'Hall C - Feynman Lab',
         capacity: 35,
@@ -251,8 +207,8 @@ const seedAll = async () => {
         targetClass: 'Class 12th Board Booster',
         course: courses[5]._id,
         courseName: courses[5].name,
-        faculty: faculty2._id,
-        facultyName: 'Er. R. K. Sharma',
+        faculty: faculty1._id,
+        facultyName: 'Arun Sir',
         days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
         room: 'Hall B - Newton Hall',
         capacity: 40,
@@ -280,15 +236,9 @@ const seedAll = async () => {
       },
     ]);
 
-    // Link assigned batches to faculty
+    // Link all assigned batches to Arun Sir (sole faculty & director)
     await Faculty.findByIdAndUpdate(faculty1._id, {
-      assignedBatches: [batches[0]._id, batches[3]._id, batches[5]._id],
-    });
-    await Faculty.findByIdAndUpdate(faculty2._id, {
-      assignedBatches: [batches[2]._id, batches[4]._id],
-    });
-    await Faculty.findByIdAndUpdate(faculty3._id, {
-      assignedBatches: [batches[1]._id],
+      assignedBatches: batches.map((b) => b._id),
     });
 
     console.log('🌱 Seeding Students (Including Sneha Joshi from WhatsApp pic & Student 1-10)...');
@@ -532,8 +482,8 @@ const seedAll = async () => {
         batch: batches[1]._id,
         batchName: `${batches[1].timeSlot} ${batches[1].name}`,
         date: yesterdayStr,
-        markedBy: faculty3.user,
-        markedByName: 'Dr. Priya Verma',
+        markedBy: faculty1.user,
+        markedByName: 'Arun Sir',
         records: arjunStudents.map((s) => ({
           student: s._id,
           studentId: s.studentId,
@@ -569,10 +519,10 @@ const seedAll = async () => {
         postedBy: 'Arun Sir',
       },
       {
-        title: 'Faculty Curriculum Review Meeting',
+        title: 'Doubt Clearing & DPP Discussion Session',
         content:
-          'All faculty members are requested to join the monthly syllabus tracking and student progress meeting on Friday at 2:00 PM.',
-        targetAudience: 'faculty',
+          'Arun Sir will conduct a specialized 1-on-1 problem-solving & DPP clearing desk this Saturday from 2:00 PM to 4:00 PM at Physics Mirror.',
+        targetAudience: 'all',
         priority: 'Normal',
         postedBy: 'Arun Sir (Director)',
       },
@@ -595,7 +545,7 @@ const seedAll = async () => {
         email: 'pooja.reddy@yahoo.com',
         targetClass: 'NEET',
         preferredBatchTime: '08:00 AM - 10:00 AM',
-        message: 'Want to enroll in NEET Physics foundation batch.',
+        message: 'Want to enroll in NEET Physics foundation batch under Arun Sir.',
         status: 'Contacted',
       },
     ]);
@@ -638,8 +588,8 @@ const seedAll = async () => {
         fileName: 'Kinematics_Projectile_Motion_DPP_02.pdf',
         fileSize: '2.8 MB',
         fileData: dummyPdfData,
-        uploadedBy: facultyUser3._id,
-        facultyName: 'Dr. Priya Verma',
+        uploadedBy: facultyUser1._id,
+        facultyName: 'Arun Sir',
         downloadCount: 14,
       },
       {
@@ -657,8 +607,8 @@ const seedAll = async () => {
         fileName: 'Electricity_Circuits_DPP_03.pdf',
         fileSize: '1.9 MB',
         fileData: dummyPdfData,
-        uploadedBy: facultyUser2._id,
-        facultyName: 'Er. R. K. Sharma',
+        uploadedBy: facultyUser1._id,
+        facultyName: 'Arun Sir',
         downloadCount: 11,
       },
       {
@@ -686,9 +636,7 @@ const seedAll = async () => {
     console.log('----------------------------------------------------');
     console.log('Demo Credentials:');
     console.log('👤 Admin:   admin@physicsmirror.com / admin123');
-    console.log('👨‍🏫 Faculty: arunsir@physicsmirror.com / faculty123');
-    console.log('            rksharma@physicsmirror.com / faculty123');
-    console.log('            priya.verma@physicsmirror.com / faculty123');
+    console.log('👨‍🏫 Faculty: arunsir@physicsmirror.com / faculty123 (Arun Sir - Sole Master Faculty)');
     console.log('🎓 Student: PM26009 (Sneha Joshi) / student123');
     console.log('            STU2026090010 (Student 10) / student123');
     console.log('            PM26001 (Aarav Sharma) / student123');

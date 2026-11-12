@@ -79,7 +79,7 @@ const AddFacultyModal = ({ isOpen, onClose, onSuccess, batches = [] }) => {
               required
               value={formData.name}
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-              placeholder="e.g. Er. R. K. Sharma"
+              placeholder="e.g. Arun Sir"
               className="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#0c2356] outline-none"
             />
           </div>

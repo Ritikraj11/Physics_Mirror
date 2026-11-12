@@ -17,7 +17,7 @@ const Header = ({ onToggleSidebar }) => {
     <header className="bg-[#0c2356] text-white shadow-md z-30 sticky top-0">
       <div className="px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          
+
           {/* Left section: Hamburger + Brand */}
           <div className="flex items-center space-x-3">
             <button
@@ -29,8 +29,16 @@ const Header = ({ onToggleSidebar }) => {
             </button>
 
             <Link to="/" className="flex items-center space-x-2.5">
-              <div className="w-8 h-8 rounded-full bg-white p-0.5 flex items-center justify-center shadow-sm">
-                <img src="/logo.png" alt="PM" className="w-full h-full object-contain" />
+              <div className="w-8 h-8 rounded-full bg-white p-0.5 flex items-center justify-center shadow-sm overflow-hidden">
+                <img
+                  src="/logo.jpg"
+                  alt="PM"
+                  className="w-full h-full object-contain rounded-full"
+                  onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src = '/logo.png';
+                  }}
+                />
               </div>
               <div className="flex items-baseline">
                 <span className="font-extrabold text-base tracking-tight text-white">PHYSICS</span>

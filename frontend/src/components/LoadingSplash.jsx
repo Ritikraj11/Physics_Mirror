@@ -19,15 +19,19 @@ const LoadingSplash = ({ progress = 0, message = 'Fetching data from database...
 
       {/* Main Content Box */}
       <div className="relative z-10 flex flex-col items-center max-w-sm w-full text-center space-y-6">
-        
+
         {/* Glowing Logo Container */}
         <div className="relative">
           <div className="absolute -inset-2 rounded-full bg-gradient-to-tr from-[#ffc700] to-sky-400 opacity-60 blur-md animate-pulse" />
-          <div className="relative w-24 h-24 rounded-full bg-white p-2.5 shadow-2xl flex items-center justify-center border-2 border-[#ffc700]">
+          <div className="relative w-24 h-24 rounded-full bg-white p-1.5 shadow-2xl flex items-center justify-center border-2 border-[#ffc700] overflow-hidden">
             <img
-              src="/logo.png"
+              src="/logo.jpg"
               alt="Physics Mirror Logo"
-              className="w-full h-full object-contain animate-float"
+              className="w-full h-full object-contain rounded-full animate-float"
+              onError={(e) => {
+                e.target.onerror = null;
+                e.target.src = '/logo.png';
+              }}
             />
           </div>
         </div>
