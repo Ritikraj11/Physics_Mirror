@@ -39,6 +39,7 @@ const Sidebar = ({ role = 'admin', isOpen = true, onClose }) => {
     { name: 'Payments', path: '/admin/payments', icon: CreditCard },
     { name: 'Reports', path: '/admin/reports', icon: BarChart3 },
     { name: 'Notices', path: '/admin/notices', icon: Bell },
+    { name: 'Settings & Security', path: '/admin/settings', icon: Settings },
   ];
 
   const facultyNav = [

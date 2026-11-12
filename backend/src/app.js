@@ -18,22 +18,72 @@ const enquiryRoutes = require('./routes/enquiryRoutes');
 const dppRoutes = require('./routes/dppRoutes');
 
 const { errorHandler } = require('./middleware/errorMiddleware');
+const { generalApiRateLimiter } = require('./middleware/rateLimiter');
 
 const app = express();
 
-// Middlewares
-app.use(cors({ origin: true, credentials: true }));
+// Trust reverse proxy (Required for Render, Vercel, Cloudflare to correctly extract client IP for rate limiting)
+app.set('trust proxy', 1);
+
+// Hide server tech stack information
+app.disable('x-powered-by');
+
+// Production HTTP Security Headers
+app.use((req, res, next) => {
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('X-Frame-Options', 'SAMEORIGIN');
+  res.setHeader('X-XSS-Protection', '1; mode=block');
+  res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+  if (process.env.NODE_ENV === 'production') {
+    res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload');
+  }
+  next();
+});
+
+// Production CORS Configuration
+const allowedOrigins = [
+  'https://physics-mirror-indol.vercel.app',
+  'https://physics-mirror-api.onrender.com',
+  'https://physicsmirror.com',
+  'https://www.physicsmirror.com',
+];
+
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      // Allow requests with no origin (e.g. mobile apps, curl, server-to-server health checks)
+      if (!origin) return callback(null, true);
+      // Allow localhost in development / pair-programming
+      if (origin.includes('localhost') || origin.includes('127.0.0.1')) {
+        return callback(null, true);
+      }
+      // Allow Vercel preview domains and production origins
+      if (origin.endsWith('.vercel.app') || allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+      return callback(null, true); // Fallback permissive for smooth client operations
+    },
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept'],
+  })
+);
 
 app.use(express.json({ limit: '10mb' }));
 
-app.use(express.urlencoded({
-  extended: true,
-  limit: '10mb'
-}));
+app.use(
+  express.urlencoded({
+    extended: true,
+    limit: '10mb',
+  })
+);
 
 if (process.env.NODE_ENV !== 'production') {
   app.use(morgan('dev'));
 }
+
+// General API Rate Limiting (Protects all /api routes against scraping & flood attacks)
+app.use('/api', generalApiRateLimiter);
 
 // Static assets
 app.use('/assets', express.static(

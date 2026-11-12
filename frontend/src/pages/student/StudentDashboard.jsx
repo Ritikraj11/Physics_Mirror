@@ -65,9 +65,20 @@ const StudentDashboard = () => {
       <div className="bg-[#0c2356] text-white p-6 sm:p-8 rounded-3xl shadow-xl relative overflow-hidden bg-grid-pattern border border-sky-900/40">
         <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-4 sm:space-y-0 sm:space-x-5 relative z-10">
           
-          {/* Avatar Circle with initials (Matches screenshot: Dark blue circle with bold yellow initials) */}
-          <div className="w-20 h-20 rounded-full bg-[#07173b] border-2 border-sky-400/30 text-[#ffc700] font-black text-2xl flex items-center justify-center flex-shrink-0 shadow-lg">
-            {initials}
+          {/* Avatar with photo / initials */}
+          <div className="w-20 h-20 rounded-full bg-[#07173b] border-2 border-[#ffc700] text-[#ffc700] font-black text-2xl flex items-center justify-center flex-shrink-0 shadow-lg overflow-hidden">
+            <img
+              src={
+                profile?.photo ||
+                `https://ui-avatars.com/api/?name=${encodeURIComponent(studentName)}&background=07173b&color=ffc700&bold=true`
+              }
+              alt={studentName}
+              className="w-full h-full object-cover"
+              onError={(e) => {
+                e.target.onerror = null;
+                e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(studentName)}&background=07173b&color=ffc700&bold=true`;
+              }}
+            />
           </div>
 
           {/* Student Info */}
@@ -86,6 +97,14 @@ const StudentDashboard = () => {
               <span>
                 ID <strong className="text-[#ffc700] font-bold">{studentId}</strong>
               </span>
+              {profile?.seatNumber && (
+                <>
+                  <span>•</span>
+                  <span className="px-2 py-0.5 rounded bg-[#ffc700] text-[#0c2356] font-extrabold text-xs shadow">
+                    🪑 {profile.seatNumber}
+                  </span>
+                </>
+              )}
             </p>
           </div>
 

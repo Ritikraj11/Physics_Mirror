@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useSearchParams, useNavigate, Link } from 'react-router-dom';
-import { GraduationCap, Shield, UserCheck, Lock, AlertCircle, ArrowLeft, KeyRound } from 'lucide-react';
+import { GraduationCap, Shield, UserCheck, Lock, AlertCircle, ArrowLeft } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 
 const Login = () => {
@@ -20,24 +20,8 @@ const Login = () => {
     setActiveRole(newRole);
     setSearchParams({ role: newRole });
     setError('');
-    // Auto populate demo value based on role
-    if (newRole === 'student') {
-      setIdentifier('PM26009');
-      setPassword('student123');
-    } else if (newRole === 'faculty') {
-      setIdentifier('arunsir@physicsmirror.com');
-      setPassword('faculty123');
-    } else {
-      setIdentifier('admin@physicsmirror.com');
-      setPassword('admin123');
-    }
-  };
-
-  const handleQuickDemo = (role, id, pwd) => {
-    setActiveRole(role);
-    setSearchParams({ role });
-    setIdentifier(id);
-    setPassword(pwd);
+    setIdentifier('');
+    setPassword('');
   };
 
   const handleSubmit = async (e) => {
@@ -189,10 +173,10 @@ const Login = () => {
                 onChange={(e) => setIdentifier(e.target.value)}
                 placeholder={
                   activeRole === 'student'
-                    ? 'e.g. PM26009 or 9876543209'
+                    ? 'Enter Student ID, Mobile or Email'
                     : activeRole === 'faculty'
-                      ? 'e.g. arunsir@physicsmirror.com'
-                      : 'admin@physicsmirror.com'
+                      ? 'Enter Faculty ID or Email'
+                      : 'Enter Admin Email'
                 }
                 className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 font-medium text-sm focus:ring-2 focus:ring-[#0c2356] focus:border-transparent outline-none transition"
               />
@@ -224,42 +208,8 @@ const Login = () => {
 
           {/* Yellow Info Box (Matches WhatsApp Screenshot) */}
           <div className="mt-5 p-3.5 bg-[#fff9db] border border-amber-200/80 rounded-2xl text-[11px] text-amber-900 leading-relaxed">
-            Online login is active. For account help or new batch access, call{' '}
-            <strong className="underline decoration-amber-600">+91 98765 43210</strong>.
-          </div>
-
-          {/* Quick Demo Logins Section */}
-          <div className="mt-6 pt-5 border-t border-slate-100">
-            <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-2 flex items-center">
-              <KeyRound className="w-3 h-3 mr-1 text-slate-400" />
-              QUICK ONE-CLICK DEMO FILL:
-            </p>
-            <div className="grid grid-cols-3 gap-1.5 text-[10px]">
-              <button
-                type="button"
-                onClick={() => handleQuickDemo('student', 'PM26009', 'student123')}
-                className="p-1.5 bg-sky-50 hover:bg-sky-100 text-[#0c2356] font-bold rounded-lg border border-sky-100 transition truncate"
-                title="Sneha Joshi (Class 11 - PM26009)"
-              >
-                🎓 Sneha (Student)
-              </button>
-              <button
-                type="button"
-                onClick={() => handleQuickDemo('faculty', 'arunsir@physicsmirror.com', 'faculty123')}
-                className="p-1.5 bg-amber-50 hover:bg-amber-100 text-amber-900 font-bold rounded-lg border border-amber-100 transition truncate"
-                title="Arun Sir (Head Physics Faculty)"
-              >
-                👨‍🏫 Arun Sir (Faculty)
-              </button>
-              <button
-                type="button"
-                onClick={() => handleQuickDemo('admin', 'admin@physicsmirror.com', 'admin123')}
-                className="p-1.5 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold rounded-lg border border-slate-200 transition truncate"
-                title="Admin Desk"
-              >
-                🛡️ Admin Desk
-              </button>
-            </div>
+            Physics Mirror Portal. For account assistance, admission queries, or batch access, contact our desk at{' '}
+            <strong className="underline decoration-amber-600 font-bold">+91 98765 43210</strong>.
           </div>
 
         </div>

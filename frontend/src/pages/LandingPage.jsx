@@ -1019,13 +1019,13 @@ const LandingPage = () => {
                 <li>
                   <Link to="/login?role=student" className="text-[#ffc700] hover:underline flex items-center space-x-1.5">
                     <GraduationCap className="w-3.5 h-3.5" />
-                    <span>Student Login (Sneha Joshi / Roll)</span>
+                    <span>Student Portal Login</span>
                   </Link>
                 </li>
                 <li>
                   <Link to="/login?role=faculty" className="text-sky-300 hover:underline flex items-center space-x-1.5">
                     <UserCheck className="w-3.5 h-3.5" />
-                    <span>Faculty Login (Arun Sir / Master)</span>
+                    <span>Faculty Portal Login</span>
                   </Link>
                 </li>
                 <li>

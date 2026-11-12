@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Menu, User, ChevronDown, LogOut, Bell, Shield, GraduationCap, Home } from 'lucide-react';
+import { Menu, User, ChevronDown, LogOut, Bell, Shield, GraduationCap, Home, Lock } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import ChangePasswordModal from './ChangePasswordModal';
 
 const Header = ({ onToggleSidebar }) => {
   const { user, logout } = useAuth();
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [changePasswordOpen, setChangePasswordOpen] = useState(false);
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -94,6 +96,17 @@ const Header = ({ onToggleSidebar }) => {
                   </Link>
 
                   <button
+                    onClick={() => {
+                      setDropdownOpen(false);
+                      setChangePasswordOpen(true);
+                    }}
+                    className="w-full flex items-center px-4 py-2 text-xs text-slate-700 hover:bg-slate-50 hover:text-[#0c2356] text-left"
+                  >
+                    <Lock className="w-3.5 h-3.5 mr-2 text-slate-400" />
+                    Change Password
+                  </button>
+
+                  <button
                     onClick={handleLogout}
                     className="w-full flex items-center px-4 py-2 text-xs text-red-600 hover:bg-red-50 text-left font-semibold"
                   >
@@ -107,6 +120,11 @@ const Header = ({ onToggleSidebar }) => {
 
         </div>
       </div>
+
+      <ChangePasswordModal
+        isOpen={changePasswordOpen}
+        onClose={() => setChangePasswordOpen(false)}
+      />
     </header>
   );
 };

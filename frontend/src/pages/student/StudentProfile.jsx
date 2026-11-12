@@ -86,13 +86,29 @@ const StudentProfile = () => {
         
         {/* Left Card: Basic Bio */}
         <div className="bg-white rounded-3xl border border-slate-200/80 shadow-sm p-6 text-center space-y-4">
-          <div className="w-24 h-24 rounded-full bg-[#0c2356] text-[#ffc700] text-3xl font-black flex items-center justify-center mx-auto shadow-md">
-            {sName.slice(0, 2).toUpperCase()}
+          <div className="w-24 h-24 rounded-full bg-[#0c2356] border-2 border-[#ffc700] overflow-hidden flex items-center justify-center mx-auto shadow-md">
+            <img
+              src={
+                profile?.photo ||
+                `https://ui-avatars.com/api/?name=${encodeURIComponent(sName)}&background=0c2356&color=ffc700&bold=true`
+              }
+              alt={sName}
+              className="w-full h-full object-cover"
+              onError={(e) => {
+                e.target.onerror = null;
+                e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(sName)}&background=0c2356&color=ffc700&bold=true`;
+              }}
+            />
           </div>
           <div>
             <h2 className="text-xl font-bold text-slate-900">{sName}</h2>
             <p className="text-xs font-mono font-bold text-[#1967d2] mt-0.5">{sId}</p>
             <p className="text-xs text-slate-500 mt-1">Roll No: {profile?.rollNo || '11-02'}</p>
+            {profile?.seatNumber && (
+              <span className="inline-block mt-1 px-2.5 py-0.5 rounded-full text-xs font-extrabold bg-[#0c2356] text-[#ffc700] shadow-sm">
+                🪑 {profile.seatNumber}
+              </span>
+            )}
           </div>
           <div className="pt-3 border-t border-slate-100 flex justify-center space-x-2">
             <span className="px-3 py-1 bg-emerald-100 text-emerald-800 text-xs font-bold rounded-full">

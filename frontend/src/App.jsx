@@ -19,6 +19,7 @@ import AdminPayments from './pages/admin/AdminPayments';
 import AdminReports from './pages/admin/AdminReports';
 import AdminNotices from './pages/admin/AdminNotices';
 import AdminCourses from './pages/admin/AdminCourses';
+import AdminSettings from './pages/admin/AdminSettings';
 
 // Faculty Pages
 import FacultyDashboard from './pages/faculty/FacultyDashboard';
@@ -52,7 +53,7 @@ function App() {
         <Route path="reports" element={<AdminReports />} />
         <Route path="notices" element={<AdminNotices />} />
         <Route path="courses" element={<AdminCourses />} />
-        <Route path="settings" element={<AdminReports />} />
+        <Route path="settings" element={<AdminSettings />} />
       </Route>
 
       {/* Faculty Portal */}

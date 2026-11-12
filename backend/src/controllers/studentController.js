@@ -92,6 +92,8 @@ const createStudent = async (req, res, next) => {
       status,
       password,
       targetClass,
+      photo,
+      seatNumber,
     } = req.body;
 
     const generatedId = studentId || (await generateNextStudentId());
@@ -144,6 +146,8 @@ const createStudent = async (req, res, next) => {
       guardianMobile: guardianMobile || '',
       address: address || '',
       rollNo: `PM-${generatedId.slice(-3)}`,
+      seatNumber: seatNumber ? String(seatNumber).trim() : '',
+      photo: photo || '',
       targetClass: targetClass || (courseObj ? courseObj.targetClass : '12th'),
       enrolledCourses,
       totalFee: numericTotalFee,

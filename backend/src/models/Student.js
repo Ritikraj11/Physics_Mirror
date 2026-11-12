@@ -100,6 +100,11 @@ const studentSchema = new mongoose.Schema(
       type: String,
       default: '',
     },
+    seatNumber: {
+      type: String,
+      default: '',
+      trim: true,
+    },
     status: {
       type: String,
       enum: ['Active', 'Inactive'],

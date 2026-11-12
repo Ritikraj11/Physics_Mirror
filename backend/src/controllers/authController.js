@@ -17,7 +17,24 @@ const generateToken = (id) => {
 const login = async (req, res, next) => {
   try {
     const { identifier, email, studentId, facultyId, mobile, password, role } = req.body;
-    const loginKey = (identifier || email || studentId || facultyId || mobile || '').trim();
+
+    // Strict validation to prevent NoSQL query injection
+    if (typeof password !== 'string') {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid credentials format',
+      });
+    }
+
+    const rawKey = identifier || email || studentId || facultyId || mobile;
+    if (!rawKey || typeof rawKey !== 'string') {
+      return res.status(400).json({
+        success: false,
+        message: 'Please provide a valid login identifier (Email/ID/Phone) and password',
+      });
+    }
+
+    const loginKey = rawKey.trim();
 
     if (!loginKey || !password) {
       return res.status(400).json({
@@ -34,8 +51,8 @@ const login = async (req, res, next) => {
     ];
 
     const query = { $or: criteria };
-    if (role) {
-      query.role = role;
+    if (role && typeof role === 'string') {
+      query.role = role.trim();
     }
 
     const user = await User.findOne(query).select('+password');
@@ -60,6 +77,11 @@ const login = async (req, res, next) => {
         success: false,
         message: 'Your account is deactivated. Contact Physics Mirror Admin.',
       });
+    }
+
+    // Reset rate limiter on successful authentication
+    if (res.locals.resetRateLimit) {
+      res.locals.resetRateLimit();
     }
 
     const token = generateToken(user._id);

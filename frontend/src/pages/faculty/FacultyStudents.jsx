@@ -93,8 +93,10 @@ const FacultyStudents = () => {
           <table className="w-full text-xs text-left">
             <thead className="bg-slate-50 text-slate-500 uppercase text-[10px] font-bold border-b border-slate-200">
               <tr>
+                <th className="py-3 px-4">PHOTO</th>
                 <th className="py-3 px-4">STUDENT ID</th>
                 <th className="py-3 px-4">NAME</th>
+                <th className="py-3 px-4">SEAT NO</th>
                 <th className="py-3 px-4">ROLL NO</th>
                 <th className="py-3 px-4">BATCH</th>
                 <th className="py-3 px-4">MOBILE</th>
@@ -106,11 +108,36 @@ const FacultyStudents = () => {
               {students.length > 0 ? (
                 students.map((stu) => (
                   <tr key={stu._id} className="hover:bg-slate-50 transition">
+                    <td className="py-3 px-4">
+                      <div className="w-9 h-9 rounded-full bg-slate-100 border border-slate-200 overflow-hidden flex items-center justify-center shadow-sm">
+                        <img
+                          src={
+                            stu.photo ||
+                            `https://ui-avatars.com/api/?name=${encodeURIComponent(stu.name || 'Student')}&background=0c2356&color=ffc700&bold=true`
+                          }
+                          alt={stu.name}
+                          className="w-full h-full object-cover"
+                          onError={(e) => {
+                            e.target.onerror = null;
+                            e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(stu.name || 'S')}&background=0c2356&color=ffc700&bold=true`;
+                          }}
+                        />
+                      </div>
+                    </td>
                     <td className="py-3 px-4 font-mono font-bold text-[#1967d2]">
                       {stu.studentId}
                     </td>
                     <td className="py-3 px-4 font-bold text-slate-800">
                       {stu.name}
+                    </td>
+                    <td className="py-3 px-4">
+                      {stu.seatNumber ? (
+                        <span className="inline-flex items-center px-2 py-0.5 rounded-md text-[11px] font-bold bg-[#0c2356]/10 text-[#0c2356] border border-[#0c2356]/20">
+                          🪑 {stu.seatNumber}
+                        </span>
+                      ) : (
+                        <span className="text-[11px] text-slate-400 italic">Unassigned</span>
+                      )}
                     </td>
                     <td className="py-3 px-4 font-mono text-slate-600">
                       {stu.rollNo || 'N/A'}
@@ -133,7 +160,7 @@ const FacultyStudents = () => {
                 ))
               ) : (
                 <tr>
-                  <td colSpan={7} className="py-8 text-center text-slate-400">
+                  <td colSpan={9} className="py-8 text-center text-slate-400">
                     No students found.
                   </td>
                 </tr>

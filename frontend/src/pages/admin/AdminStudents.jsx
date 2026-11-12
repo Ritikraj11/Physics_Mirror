@@ -184,6 +184,7 @@ const AdminStudents = () => {
                 <th className="py-3.5 px-4">PHOTO</th>
                 <th className="py-3.5 px-4">STUDENT ID</th>
                 <th className="py-3.5 px-4">NAME</th>
+                <th className="py-3.5 px-4">SEAT NO</th>
                 <th className="py-3.5 px-4">ENROLLED COURSES & BATCHES</th>
                 <th className="py-3.5 px-4">MOBILE</th>
                 <th className="py-3.5 px-4">FEE STATUS</th>
@@ -199,8 +200,19 @@ const AdminStudents = () => {
                     <tr key={student._id} className="hover:bg-slate-50/80 transition">
                       {/* Photo Column */}
                       <td className="py-3 px-4">
-                        <div className="w-9 h-9 rounded-full bg-slate-200 text-slate-600 flex items-center justify-center font-bold text-xs">
-                          {student.name ? student.name.slice(0, 2).toUpperCase() : <User className="w-4 h-4" />}
+                        <div className="w-10 h-10 rounded-full bg-slate-100 border border-slate-200 overflow-hidden flex items-center justify-center shadow-sm">
+                          <img
+                            src={
+                              student.photo ||
+                              `https://ui-avatars.com/api/?name=${encodeURIComponent(student.name || 'Student')}&background=0c2356&color=ffc700&bold=true`
+                            }
+                            alt={student.name}
+                            className="w-full h-full object-cover"
+                            onError={(e) => {
+                              e.target.onerror = null;
+                              e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(student.name || 'S')}&background=0c2356&color=ffc700&bold=true`;
+                            }}
+                          />
                         </div>
                       </td>
 
@@ -216,6 +228,17 @@ const AdminStudents = () => {
                           <span className="block text-[10px] font-medium text-slate-400">
                             Roll: {student.rollNo}
                           </span>
+                        )}
+                      </td>
+
+                      {/* Seat No Column */}
+                      <td className="py-3 px-4">
+                        {student.seatNumber ? (
+                          <span className="inline-flex items-center px-2 py-0.5 rounded-md text-[11px] font-bold bg-[#0c2356]/10 text-[#0c2356] border border-[#0c2356]/20">
+                            🪑 {student.seatNumber}
+                          </span>
+                        ) : (
+                          <span className="text-[11px] text-slate-400 italic">Unassigned</span>
                         )}
                       </td>
 
@@ -304,7 +327,7 @@ const AdminStudents = () => {
                 })
               ) : (
                 <tr>
-                  <td colSpan={8} className="py-12 text-center text-slate-400">
+                  <td colSpan={9} className="py-12 text-center text-slate-400">
                     No students match the criteria. Click "+ Add New Student" to enroll.
                   </td>
                 </tr>
@@ -319,13 +342,29 @@ const AdminStudents = () => {
         <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
           <div className="bg-white rounded-3xl shadow-2xl max-w-lg w-full overflow-hidden p-6 space-y-4 animate-in zoom-in-95 duration-150">
             <div className="flex items-center justify-between border-b pb-3">
-              <div className="flex items-center space-x-3">
-                <div className="w-12 h-12 rounded-full bg-[#0c2356] text-[#ffc700] font-bold flex items-center justify-center text-base">
-                  {viewStudentModal.name?.slice(0, 2).toUpperCase()}
+              <div className="flex items-center space-x-3.5">
+                <div className="w-14 h-14 rounded-full bg-[#0c2356] border-2 border-[#ffc700] overflow-hidden flex items-center justify-center shadow-md flex-shrink-0">
+                  <img
+                    src={
+                      viewStudentModal.photo ||
+                      `https://ui-avatars.com/api/?name=${encodeURIComponent(viewStudentModal.name || 'Student')}&background=0c2356&color=ffc700&bold=true`
+                    }
+                    alt={viewStudentModal.name}
+                    className="w-full h-full object-cover"
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(viewStudentModal.name || 'S')}&background=0c2356&color=ffc700&bold=true`;
+                    }}
+                  />
                 </div>
                 <div>
                   <h3 className="text-base font-bold text-slate-900">{viewStudentModal.name}</h3>
                   <p className="text-xs font-mono font-semibold text-[#1967d2]">{viewStudentModal.studentId}</p>
+                  {viewStudentModal.seatNumber && (
+                    <span className="inline-block mt-0.5 px-2 py-0.5 rounded text-[10px] font-bold bg-[#0c2356]/10 text-[#0c2356]">
+                      🪑 {viewStudentModal.seatNumber}
+                    </span>
+                  )}
                 </div>
               </div>
               <button onClick={() => setViewStudentModal(null)} className="text-slate-400 hover:text-slate-700">
@@ -334,6 +373,39 @@ const AdminStudents = () => {
             </div>
 
             <div className="space-y-3 text-xs">
+              {/* Seat Number Assign / Update Section */}
+              <div className="p-3 bg-amber-50/70 border border-amber-200/80 rounded-xl flex items-center justify-between">
+                <div>
+                  <span className="text-amber-900 font-bold text-[10px] uppercase tracking-wider block">
+                    ASSIGN SEAT NUMBER
+                  </span>
+                  <input
+                    type="text"
+                    value={viewStudentModal.seatNumber || ''}
+                    onChange={(e) => setViewStudentModal({ ...viewStudentModal, seatNumber: e.target.value })}
+                    placeholder="e.g. Seat A-12"
+                    className="mt-1 px-2.5 py-1 bg-white border border-amber-300 rounded-lg text-xs font-bold text-slate-800 outline-none focus:ring-2 focus:ring-[#0c2356] w-36"
+                  />
+                </div>
+                <button
+                  type="button"
+                  onClick={async () => {
+                    try {
+                      await api.put(`/students/${viewStudentModal._id}`, { seatNumber: viewStudentModal.seatNumber });
+                      setStudents((prev) =>
+                        prev.map((s) => (s._id === viewStudentModal._id ? { ...s, seatNumber: viewStudentModal.seatNumber } : s))
+                      );
+                      alert('Seat number updated successfully!');
+                    } catch (err) {
+                      alert(err.response?.data?.message || 'Failed to update seat number');
+                    }
+                  }}
+                  className="px-3 py-1.5 bg-[#0c2356] hover:bg-[#163b96] text-white text-[11px] font-bold rounded-lg shadow transition"
+                >
+                  Save Seat
+                </button>
+              </div>
+
               <div className="grid grid-cols-2 gap-3 p-3 bg-slate-50 rounded-xl">
                 <div>
                   <span className="text-slate-400 font-semibold text-[10px] uppercase">MOBILE</span>

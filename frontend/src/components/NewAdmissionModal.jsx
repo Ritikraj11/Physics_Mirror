@@ -19,6 +19,8 @@ const NewAdmissionModal = ({ isOpen, onClose, onSuccess, initialCourses = [], in
     guardianName: '',
     guardianMobile: '',
     address: '',
+    seatNumber: '',
+    photo: '',
     courseId: '',
     batchId: '',
     totalFee: 20000,
@@ -78,6 +80,20 @@ const NewAdmissionModal = ({ isOpen, onClose, onSuccess, initialCourses = [], in
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handlePhotoChange = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (file.size > 5 * 1024 * 1024) {
+      setError('Photo size exceeds 5MB limit');
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = () => {
+      setFormData((prev) => ({ ...prev, photo: reader.result }));
+    };
+    reader.readAsDataURL(file);
   };
 
   const handleSubmit = async (e) => {
@@ -367,13 +383,43 @@ const NewAdmissionModal = ({ isOpen, onClose, onSuccess, initialCourses = [], in
 
               <div>
                 <label className="block text-slate-700 font-semibold mb-1">
-                  Student Photo
+                  Seat Number (Assigned by Faculty / Admin)
                 </label>
                 <input
-                  type="file"
-                  accept="image/*"
-                  className="w-full px-2 py-1.5 text-[11px] bg-slate-50 border border-slate-300 rounded-lg file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:text-[10px] file:font-semibold file:bg-sky-100 file:text-[#0c2356]"
+                  type="text"
+                  name="seatNumber"
+                  value={formData.seatNumber}
+                  onChange={handleChange}
+                  placeholder="e.g. Seat A-12 or Row 1 Seat 4"
+                  className="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#1a56db] outline-none"
                 />
+              </div>
+
+              <div>
+                <label className="block text-slate-700 font-semibold mb-1">
+                  Student Photo
+                </label>
+                <div className="flex items-center space-x-3">
+                  {formData.photo ? (
+                    <div className="relative w-11 h-11 rounded-full border-2 border-[#ffc700] overflow-hidden flex-shrink-0 shadow-sm group">
+                      <img src={formData.photo} alt="Preview" className="w-full h-full object-cover" />
+                      <button
+                        type="button"
+                        onClick={() => setFormData((prev) => ({ ...prev, photo: '' }))}
+                        className="absolute inset-0 bg-black/60 text-white flex items-center justify-center text-[9px] font-bold opacity-0 group-hover:opacity-100 transition"
+                      >
+                        Remove
+                      </button>
+                    </div>
+                  ) : null}
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handlePhotoChange}
+                    className="w-full px-2 py-1.5 text-[11px] bg-slate-50 border border-slate-300 rounded-lg file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:text-[10px] file:font-semibold file:bg-sky-100 file:text-[#0c2356] cursor-pointer"
+                  />
+                </div>
+                <p className="text-[10px] text-slate-400 mt-0.5">PNG, JPG or WebP (Max 5MB)</p>
               </div>
 
               <div>
