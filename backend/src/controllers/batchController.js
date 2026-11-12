@@ -1,6 +1,8 @@
+const mongoose = require('mongoose');
 const Batch = require('../models/Batch');
 const Student = require('../models/Student');
 const Faculty = require('../models/Faculty');
+const Course = require('../models/Course');
 
 // @desc    Get all batches
 // @route   GET /api/batches
@@ -53,12 +55,16 @@ const getBatches = async (req, res, next) => {
 // @access  Private
 const getBatchById = async (req, res, next) => {
   try {
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+      return res.status(404).json({ success: false, message: 'The requested batch could not be found.' });
+    }
+
     const batch = await Batch.findById(req.params.id)
       .populate('course')
       .populate('faculty');
 
     if (!batch) {
-      return res.status(404).json({ success: false, message: 'Batch not found' });
+      return res.status(404).json({ success: false, message: 'The requested batch could not be found.' });
     }
 
     const students = await Student.find({
@@ -99,21 +105,68 @@ const createBatch = async (req, res, next) => {
       description,
     } = req.body;
 
+    if (!name || typeof name !== 'string' || !name.trim()) {
+      return res.status(400).json({
+        success: false,
+        message: 'Please provide a valid Batch Name.',
+      });
+    }
+
+    if (!timeSlot || typeof timeSlot !== 'string' || !timeSlot.trim()) {
+      return res.status(400).json({
+        success: false,
+        message: 'Please select a Batch Time Slot.',
+      });
+    }
+
+    // Safely parse ObjectIds to avoid Mongoose CastError on empty strings or defaults
+    const validFaculty =
+      faculty && typeof faculty === 'string' && mongoose.Types.ObjectId.isValid(faculty)
+        ? faculty
+        : null;
+
+    const validCourse =
+      course && typeof course === 'string' && mongoose.Types.ObjectId.isValid(course)
+        ? course
+        : null;
+
+    // Faculty Name resolution (defaults to 'Arun Sir' if no custom faculty provided)
+    let finalFacultyName = 'Arun Sir';
+    if (validFaculty) {
+      const facObj = await Faculty.findById(validFaculty);
+      if (facObj) finalFacultyName = facObj.name;
+    } else if (facultyName && typeof facultyName === 'string' && facultyName.trim()) {
+      finalFacultyName = facultyName.trim();
+    }
+
+    // Course Name resolution
+    let finalCourseName = courseName || '';
+    if (validCourse && !finalCourseName) {
+      const crsObj = await Course.findById(validCourse);
+      if (crsObj) finalCourseName = crsObj.name;
+    }
+
     const newBatch = await Batch.create({
-      name,
+      name: name.trim(),
       code: code || `PM-B-${Date.now().toString().slice(-4)}`,
-      timeSlot,
-      targetClass,
-      course,
-      courseName,
-      faculty,
-      facultyName: facultyName || 'Arun Sir',
-      days: days || ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+      timeSlot: timeSlot.trim(),
+      targetClass: targetClass || 'Class 12th + JEE Mains',
+      course: validCourse,
+      courseName: finalCourseName,
+      faculty: validFaculty,
+      facultyName: finalFacultyName,
+      days: Array.isArray(days) && days.length ? days : ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
       room: room || 'Hall A',
-      capacity: capacity || 40,
+      capacity: capacity ? Number(capacity) : 40,
       status: status || 'Active',
-      description,
+      description: description || '',
     });
+
+    if (validFaculty) {
+      await Faculty.findByIdAndUpdate(validFaculty, {
+        $addToSet: { assignedBatches: newBatch._id },
+      });
+    }
 
     res.status(201).json({
       success: true,
@@ -130,11 +183,34 @@ const createBatch = async (req, res, next) => {
 // @access  Admin only
 const updateBatch = async (req, res, next) => {
   try {
-    const batch = await Batch.findByIdAndUpdate(req.params.id, req.body, {
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+      return res.status(404).json({ success: false, message: 'The requested batch could not be found.' });
+    }
+
+    const updates = { ...req.body };
+    if ('faculty' in updates) {
+      updates.faculty =
+        updates.faculty && typeof updates.faculty === 'string' && mongoose.Types.ObjectId.isValid(updates.faculty)
+          ? updates.faculty
+          : null;
+      if (!updates.faculty && !updates.facultyName) {
+        updates.facultyName = 'Arun Sir';
+      }
+    }
+    if ('course' in updates) {
+      updates.course =
+        updates.course && typeof updates.course === 'string' && mongoose.Types.ObjectId.isValid(updates.course)
+          ? updates.course
+          : null;
+    }
+
+    const batch = await Batch.findByIdAndUpdate(req.params.id, updates, {
       new: true,
       runValidators: true,
     });
-    if (!batch) return res.status(404).json({ success: false, message: 'Batch not found' });
+    if (!batch) {
+      return res.status(404).json({ success: false, message: 'The requested batch could not be found.' });
+    }
 
     res.status(200).json({
       success: true,
@@ -151,8 +227,14 @@ const updateBatch = async (req, res, next) => {
 // @access  Admin only
 const toggleBatchStatus = async (req, res, next) => {
   try {
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+      return res.status(404).json({ success: false, message: 'The requested batch could not be found.' });
+    }
+
     const batch = await Batch.findById(req.params.id);
-    if (!batch) return res.status(404).json({ success: false, message: 'Batch not found' });
+    if (!batch) {
+      return res.status(404).json({ success: false, message: 'The requested batch could not be found.' });
+    }
 
     batch.status = batch.status === 'Active' ? 'Inactive' : 'Active';
     await batch.save();
@@ -172,8 +254,15 @@ const toggleBatchStatus = async (req, res, next) => {
 // @access  Admin only
 const deleteBatch = async (req, res, next) => {
   try {
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+      return res.status(404).json({ success: false, message: 'The requested batch could not be found.' });
+    }
+
     const batch = await Batch.findById(req.params.id);
-    if (!batch) return res.status(404).json({ success: false, message: 'Batch not found' });
+    if (!batch) {
+      return res.status(404).json({ success: false, message: 'The requested batch could not be found.' });
+    }
+
     await batch.deleteOne();
     res.status(200).json({ success: true, message: 'Batch deleted successfully' });
   } catch (error) {

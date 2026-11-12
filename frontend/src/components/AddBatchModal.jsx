@@ -35,7 +35,7 @@ const AddBatchModal = ({ isOpen, onClose, onSuccess, faculties = [], courses = [
     setFormData((prev) => ({
       ...prev,
       faculty: fId,
-      facultyName: f ? f.name : prev.facultyName,
+      facultyName: f ? f.name : 'Arun Sir',
     }));
   };
 
@@ -45,7 +45,7 @@ const AddBatchModal = ({ isOpen, onClose, onSuccess, faculties = [], courses = [
     setFormData((prev) => ({
       ...prev,
       course: cId,
-      courseName: c ? c.name : prev.courseName,
+      courseName: c ? c.name : '',
     }));
   };
 
@@ -55,13 +55,21 @@ const AddBatchModal = ({ isOpen, onClose, onSuccess, faculties = [], courses = [
     setError('');
 
     try {
-      const res = await api.post('/batches', formData);
+      const payload = {
+        ...formData,
+        faculty: formData.faculty || undefined,
+        course: formData.course || undefined,
+        facultyName: formData.facultyName || 'Arun Sir',
+      };
+      const res = await api.post('/batches', payload);
       if (res.data.success) {
         onSuccess && onSuccess(res.data.data);
         onClose();
       }
     } catch (err) {
-      setError(err.response?.data?.message || 'Failed to create batch');
+      setError(
+        err.response?.data?.message || 'Unable to create batch. Please check the entered details and try again.'
+      );
     } finally {
       setLoading(false);
     }

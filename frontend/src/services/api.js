@@ -84,16 +84,65 @@ api.interceptors.response.use(
       completeGlobalLoading();
     }
 
-    if (error.response && error.response.status === 401) {
-      const isLoginRequest = (error.config?.url || '').includes('/auth/login');
-      if (!isLoginRequest) {
-        localStorage.removeItem('pm_token');
-        localStorage.removeItem('pm_user');
-        if (window.location.pathname !== '/login' && !window.location.pathname.startsWith('/login/')) {
-          window.location.href = '/login';
+    // Sanitize technical errors into polite, human-friendly general errors
+    let userFriendlyMessage = 'An unexpected error occurred. Please try again.';
+
+    if (!error.response) {
+      // Network disconnected or backend server cold-starting
+      userFriendlyMessage =
+        'Unable to connect to Physics Mirror server. Please check your internet connection or try again in a few moments.';
+    } else {
+      const status = error.response.status;
+      const serverMsg = error.response.data?.message;
+
+      // Handle 401 Unauthorized
+      if (status === 401) {
+        const isLoginRequest = (error.config?.url || '').includes('/auth/login');
+        userFriendlyMessage = serverMsg || 'Your session has expired. Please sign in again.';
+        if (!isLoginRequest) {
+          localStorage.removeItem('pm_token');
+          localStorage.removeItem('pm_user');
+          if (window.location.pathname !== '/login' && !window.location.pathname.startsWith('/login/')) {
+            window.location.href = '/login';
+          }
+        }
+      } else if (status === 429) {
+        // Rate limit block
+        userFriendlyMessage =
+          serverMsg ||
+          'Too many attempts from your IP. Access is temporarily blocked for security. Please try again later.';
+      } else if (status === 403) {
+        userFriendlyMessage = serverMsg || 'You do not have permission to perform this action.';
+      } else if (status === 404) {
+        userFriendlyMessage =
+          serverMsg && !/id of|cast|mongo|objectid/i.test(serverMsg)
+            ? serverMsg
+            : 'The requested record or resource could not be found.';
+      } else if (status >= 500) {
+        userFriendlyMessage = 'The server is temporarily busy or updating. Please try again in a moment.';
+      } else {
+        // 400 or other 4xx: check if message contains technical phrases
+        const isTechnical =
+          /mongo|bson|cast|sql|syntax|stack|null|undefined|jwt|at object|at module|CastError|ValidationError/i.test(
+            serverMsg || ''
+          );
+        if (serverMsg && !isTechnical) {
+          userFriendlyMessage = serverMsg;
+        } else {
+          userFriendlyMessage = 'Unable to complete this action. Please check your details and try again.';
         }
       }
     }
+
+    // Ensure error.response.data.message reflects the sanitized message
+    if (error.response) {
+      if (!error.response.data || typeof error.response.data !== 'object') {
+        error.response.data = {};
+      }
+      error.response.data.message = userFriendlyMessage;
+    }
+    error.message = userFriendlyMessage;
+
     return Promise.reject(error);
   }
 );
