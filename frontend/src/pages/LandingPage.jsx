@@ -31,6 +31,7 @@ import api from '../services/api';
 const LandingPage = () => {
   const [batches, setBatches] = useState([]);
   const [courses, setCourses] = useState([]);
+  const [loadingData, setLoadingData] = useState(true);
   const [enquiryModalOpen, setEnquiryModalOpen] = useState(false);
   const [enquirySubmitted, setEnquirySubmitted] = useState(false);
   const [enquiryForm, setEnquiryForm] = useState({
@@ -38,7 +39,7 @@ const LandingPage = () => {
     mobile: '',
     email: '',
     targetClass: '12th',
-    preferredBatchTime: '05:00 AM - 07:00 AM',
+    preferredBatchTime: 'Any / Flexible Timing',
     message: '',
   });
 
@@ -50,6 +51,7 @@ const LandingPage = () => {
 
   const fetchBatchesAndCourses = async () => {
     try {
+      setLoadingData(true);
       const [bRes, cRes] = await Promise.all([
         api.get('/batches').catch(() => ({ data: { data: [] } })),
         api.get('/courses').catch(() => ({ data: { data: [] } })),
@@ -58,6 +60,8 @@ const LandingPage = () => {
       setCourses(cRes.data?.data || []);
     } catch (err) {
       console.error(err);
+    } finally {
+      setLoadingData(false);
     }
   };
 
@@ -345,7 +349,7 @@ const LandingPage = () => {
         </div>
       </section>
 
-      {/* Batches Section (Specifically 6 Batches by Time and Name from Prompt!) */}
+      {/* Batches Section - Synced with Database */}
       <section id="batches" className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
@@ -354,222 +358,147 @@ const LandingPage = () => {
               TIMETABLE & BATCHES
             </span>
             <h2 className="text-3xl sm:text-4xl font-black text-[#0c2356]">
-              6 Specialized Batches by Timing & Focus
+              {batches.length > 0
+                ? `${batches.length} Specialized Batches by Timing & Focus`
+                : 'Specialized Batches by Timing & Focus'}
             </h2>
             <p className="text-slate-600 text-sm sm:text-base">
               Morning early bird batches to evening boosters — designed to fit seamlessly around your school schedule.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-
-            {/* Batch 1: 5am - 7am Pratigya Batch */}
-            <div className="bg-[#f8fafc] rounded-2xl p-6 border-2 border-slate-200 hover:border-[#163b96] hover:shadow-lg transition relative flex flex-col justify-between">
-              <div>
-                <div className="flex items-center justify-between mb-3">
-                  <span className="px-2.5 py-1 bg-[#0c2356] text-[#ffc700] text-xs font-bold rounded-lg flex items-center space-x-1">
-                    <Clock className="w-3.5 h-3.5" />
-                    <span>05:00 AM - 07:00 AM</span>
-                  </span>
-                  <span className="px-2 py-0.5 bg-emerald-100 text-emerald-800 text-[11px] font-bold rounded-full">
-                    Active
-                  </span>
+          {loadingData ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {[1, 2, 3].map((n) => (
+                <div key={n} className="bg-slate-50 rounded-2xl p-6 border border-slate-200 animate-pulse space-y-4">
+                  <div className="h-6 bg-slate-200 rounded w-1/3"></div>
+                  <div className="h-8 bg-slate-200 rounded w-2/3"></div>
+                  <div className="h-16 bg-slate-200 rounded w-full"></div>
+                  <div className="h-10 bg-slate-200 rounded w-full mt-4"></div>
                 </div>
-                <h3 className="text-xl font-bold text-[#0c2356]">Pratigya Batch</h3>
-                <p className="text-xs font-semibold text-slate-500 mt-0.5">Class 12th Physics + JEE Mains</p>
-                <p className="text-xs text-slate-600 mt-3">
-                  High-focus early morning session covering rigorous numerical problem solving and deep conceptual theory.
-                </p>
-                <div className="mt-4 pt-4 border-t border-slate-200/60 text-xs text-slate-500 space-y-1">
-                  <p>👨‍🏫 Faculty: <span className="font-bold text-slate-800">Arun Sir</span></p>
-                  <p>🏢 Room: Hall A (Einstein Wing)</p>
-                  <p>📅 Days: Monday – Saturday</p>
-                </div>
+              ))}
+            </div>
+          ) : batches.length === 0 ? (
+            <div className="bg-slate-50 border border-slate-200 rounded-3xl p-12 text-center max-w-xl mx-auto space-y-3">
+              <div className="w-12 h-12 rounded-2xl bg-sky-100 text-[#1967d2] flex items-center justify-center mx-auto">
+                <Clock className="w-6 h-6" />
               </div>
+              <h3 className="text-lg font-bold text-slate-800">New Batches Being Scheduled</h3>
+              <p className="text-xs text-slate-500 leading-relaxed">
+                Upcoming academic batches for the new session are currently being scheduled. Submit an enquiry to reserve your preferred timing slot.
+              </p>
               <button
                 onClick={() => {
-                  setEnquiryForm((prev) => ({ ...prev, preferredBatchTime: '05:00 AM - 07:00 AM' }));
+                  setEnquiryForm((prev) => ({
+                    ...prev,
+                    preferredBatchTime: 'Any / Flexible Timing',
+                  }));
                   setEnquiryModalOpen(true);
                 }}
-                className="mt-6 w-full py-2.5 bg-white border border-[#0c2356] hover:bg-[#0c2356] hover:text-white text-[#0c2356] font-bold text-xs rounded-xl transition"
+                className="mt-2 px-6 py-2.5 bg-[#0c2356] hover:bg-[#163b96] text-white font-bold text-xs rounded-xl shadow transition"
               >
-                Join Pratigya Batch
+                Enquire for Batch Timings
               </button>
             </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {batches.map((batch) => {
+                const isActive = batch.status === 'Active';
+                const daysText = Array.isArray(batch.days)
+                  ? batch.days.join(', ')
+                  : (batch.days || 'Monday – Saturday');
 
-            {/* Batch 2: 8am - 10am Arjun Batch */}
-            <div className="bg-[#f8fafc] rounded-2xl p-6 border-2 border-slate-200 hover:border-[#163b96] hover:shadow-lg transition relative flex flex-col justify-between">
-              <div>
-                <div className="flex items-center justify-between mb-3">
-                  <span className="px-2.5 py-1 bg-[#0c2356] text-[#ffc700] text-xs font-bold rounded-lg flex items-center space-x-1">
-                    <Clock className="w-3.5 h-3.5" />
-                    <span>08:00 AM - 10:00 AM</span>
-                  </span>
-                  <span className="px-2 py-0.5 bg-emerald-100 text-emerald-800 text-[11px] font-bold rounded-full">
-                    Active
-                  </span>
-                </div>
-                <h3 className="text-xl font-bold text-[#0c2356]">Arjun Batch</h3>
-                <p className="text-xs font-semibold text-slate-500 mt-0.5">Class 11th Physics + NEET Focus</p>
-                <p className="text-xs text-slate-600 mt-3">
-                  Foundational mechanics, vectors, heat and thermodynamics with NCERT line-by-line decoding and medical question patterns.
-                </p>
-                <div className="mt-4 pt-4 border-t border-slate-200/60 text-xs text-slate-500 space-y-1">
-                  <p>👨‍🏫 Faculty: <span className="font-bold text-slate-800">Arun Sir</span></p>
-                  <p>🏢 Room: Hall B (Newton Hall)</p>
-                  <p>📅 Days: Monday – Saturday</p>
-                </div>
-              </div>
-              <button
-                onClick={() => {
-                  setEnquiryForm((prev) => ({ ...prev, preferredBatchTime: '08:00 AM - 10:00 AM' }));
-                  setEnquiryModalOpen(true);
-                }}
-                className="mt-6 w-full py-2.5 bg-white border border-[#0c2356] hover:bg-[#0c2356] hover:text-white text-[#0c2356] font-bold text-xs rounded-xl transition"
-              >
-                Join Arjun Batch
-              </button>
+                return (
+                  <div
+                    key={batch._id}
+                    className={`rounded-2xl p-6 border-2 transition relative flex flex-col justify-between ${
+                      isActive
+                        ? 'bg-[#f8fafc] border-slate-200 hover:border-[#163b96] hover:shadow-lg'
+                        : 'bg-slate-100/70 border-dashed border-slate-300 opacity-80'
+                    }`}
+                  >
+                    <div>
+                      <div className="flex items-center justify-between mb-3">
+                        <span
+                          className={`px-2.5 py-1 text-xs font-bold rounded-lg flex items-center space-x-1 ${
+                            isActive ? 'bg-[#0c2356] text-[#ffc700]' : 'bg-slate-700 text-slate-200'
+                          }`}
+                        >
+                          <Clock className="w-3.5 h-3.5" />
+                          <span>{batch.timeSlot}</span>
+                        </span>
+                        <span
+                          className={`px-2 py-0.5 text-[11px] font-bold rounded-full ${
+                            isActive
+                              ? 'bg-emerald-100 text-emerald-800'
+                              : 'bg-amber-100 text-amber-800'
+                          }`}
+                        >
+                          {isActive ? 'Active' : 'Inactive'}
+                        </span>
+                      </div>
+
+                      <h3 className="text-xl font-bold text-[#0c2356]">{batch.name}</h3>
+                      <p className="text-xs font-semibold text-slate-500 mt-0.5">
+                        {batch.targetClass} {batch.courseName ? `• ${batch.courseName}` : ''}
+                      </p>
+                      <p className="text-xs text-slate-600 mt-3 leading-relaxed">
+                        {batch.course?.description ||
+                          'Comprehensive physics mastery sessions covering theory, derivations, and intensive numerical drills with Arun Sir.'}
+                      </p>
+
+                      <div className="mt-4 pt-4 border-t border-slate-200/60 text-xs text-slate-500 space-y-1">
+                        <p>
+                          👨‍🏫 Faculty: <span className="font-bold text-slate-800">{batch.facultyName || 'Arun Sir'}</span>
+                        </p>
+                        <p>
+                          🏢 Room: <span className="font-medium text-slate-700">{batch.room || 'Main Lecture Hall'}</span>
+                        </p>
+                        <p>
+                          📅 Days: <span className="font-medium text-slate-700">{daysText}</span>
+                        </p>
+                      </div>
+                    </div>
+
+                    <button
+                      onClick={() => {
+                        if (!isActive) return;
+                        setEnquiryForm((prev) => ({
+                          ...prev,
+                          preferredBatchTime: `${batch.timeSlot} (${batch.name})`,
+                          targetClass: batch.targetClass?.includes('11')
+                            ? '11th'
+                            : batch.targetClass?.includes('10')
+                            ? '10th'
+                            : batch.targetClass?.includes('9')
+                            ? '9th'
+                            : batch.targetClass?.includes('NEET')
+                            ? 'NEET'
+                            : batch.targetClass?.includes('JEE')
+                            ? 'JEE Mains'
+                            : '12th',
+                        }));
+                        setEnquiryModalOpen(true);
+                      }}
+                      disabled={!isActive}
+                      className={`mt-6 w-full py-2.5 font-bold text-xs rounded-xl transition ${
+                        isActive
+                          ? 'bg-white border border-[#0c2356] hover:bg-[#0c2356] hover:text-white text-[#0c2356]'
+                          : 'bg-slate-200 text-slate-500 cursor-not-allowed'
+                      }`}
+                    >
+                      {isActive ? `Join ${batch.name}` : 'Batch Currently Closed'}
+                    </button>
+                  </div>
+                );
+              })}
             </div>
-
-            {/* Batch 3: 10:30am - 12:30pm Sankalp Batch */}
-            <div className="bg-[#f8fafc] rounded-2xl p-6 border-2 border-slate-200 hover:border-[#163b96] hover:shadow-lg transition relative flex flex-col justify-between">
-              <div>
-                <div className="flex items-center justify-between mb-3">
-                  <span className="px-2.5 py-1 bg-[#0c2356] text-[#ffc700] text-xs font-bold rounded-lg flex items-center space-x-1">
-                    <Clock className="w-3.5 h-3.5" />
-                    <span>10:30 AM - 12:30 PM</span>
-                  </span>
-                  <span className="px-2 py-0.5 bg-emerald-100 text-emerald-800 text-[11px] font-bold rounded-full">
-                    Active
-                  </span>
-                </div>
-                <h3 className="text-xl font-bold text-[#0c2356]">Sankalp Batch</h3>
-                <p className="text-xs font-semibold text-slate-500 mt-0.5">Class 10th Board + Foundation</p>
-                <p className="text-xs text-slate-600 mt-3">
-                  Targeting 100/100 in Board examinations with strong Olympiad fundamentals (Electricity, Optics & Magnetic effects).
-                </p>
-                <div className="mt-4 pt-4 border-t border-slate-200/60 text-xs text-slate-500 space-y-1">
-                  <p>👨‍🏫 Faculty: <span className="font-bold text-slate-800">Arun Sir</span></p>
-                  <p>🏢 Room: Hall C (Feynman Lab)</p>
-                  <p>📅 Days: Mon, Wed, Fri</p>
-                </div>
-              </div>
-              <button
-                onClick={() => {
-                  setEnquiryForm((prev) => ({ ...prev, preferredBatchTime: '10:30 AM - 12:30 PM' }));
-                  setEnquiryModalOpen(true);
-                }}
-                className="mt-6 w-full py-2.5 bg-white border border-[#0c2356] hover:bg-[#0c2356] hover:text-white text-[#0c2356] font-bold text-xs rounded-xl transition"
-              >
-                Join Sankalp Batch
-              </button>
-            </div>
-
-            {/* Batch 4: 3:00pm - 5:00pm Lakshya Batch */}
-            <div className="bg-[#f8fafc] rounded-2xl p-6 border-2 border-slate-200 hover:border-[#163b96] hover:shadow-lg transition relative flex flex-col justify-between">
-              <div>
-                <div className="flex items-center justify-between mb-3">
-                  <span className="px-2.5 py-1 bg-[#0c2356] text-[#ffc700] text-xs font-bold rounded-lg flex items-center space-x-1">
-                    <Clock className="w-3.5 h-3.5" />
-                    <span>03:00 PM - 05:00 PM</span>
-                  </span>
-                  <span className="px-2 py-0.5 bg-emerald-100 text-emerald-800 text-[11px] font-bold rounded-full">
-                    Active
-                  </span>
-                </div>
-                <h3 className="text-xl font-bold text-[#0c2356]">Lakshya Batch</h3>
-                <p className="text-xs font-semibold text-slate-500 mt-0.5">Class 9th Foundation Physics</p>
-                <p className="text-xs text-slate-600 mt-3">
-                  Early bridge courses nurturing young scientific minds in motion, force, work, gravitation and sound.
-                </p>
-                <div className="mt-4 pt-4 border-t border-slate-200/60 text-xs text-slate-500 space-y-1">
-                  <p>👨‍🏫 Faculty: <span className="font-bold text-slate-800">Arun Sir</span></p>
-                  <p>🏢 Room: Hall A (Einstein Wing)</p>
-                  <p>📅 Days: Tue, Thu, Sat</p>
-                </div>
-              </div>
-              <button
-                onClick={() => {
-                  setEnquiryForm((prev) => ({ ...prev, preferredBatchTime: '03:00 PM - 05:00 PM' }));
-                  setEnquiryModalOpen(true);
-                }}
-                className="mt-6 w-full py-2.5 bg-white border border-[#0c2356] hover:bg-[#0c2356] hover:text-white text-[#0c2356] font-bold text-xs rounded-xl transition"
-              >
-                Join Lakshya Batch
-              </button>
-            </div>
-
-            {/* Batch 5: 5:30pm - 7:30pm Vijeta Batch */}
-            <div className="bg-[#f8fafc] rounded-2xl p-6 border-2 border-slate-200 hover:border-[#163b96] hover:shadow-lg transition relative flex flex-col justify-between">
-              <div>
-                <div className="flex items-center justify-between mb-3">
-                  <span className="px-2.5 py-1 bg-[#0c2356] text-[#ffc700] text-xs font-bold rounded-lg flex items-center space-x-1">
-                    <Clock className="w-3.5 h-3.5" />
-                    <span>05:30 PM - 07:30 PM</span>
-                  </span>
-                  <span className="px-2 py-0.5 bg-emerald-100 text-emerald-800 text-[11px] font-bold rounded-full">
-                    Active
-                  </span>
-                </div>
-                <h3 className="text-xl font-bold text-[#0c2356]">Vijeta Batch</h3>
-                <p className="text-xs font-semibold text-slate-500 mt-0.5">Class 12th Board Booster</p>
-                <p className="text-xs text-slate-600 mt-3">
-                  Evening crash and revision batch emphasizing derivations, circuit problems, optical instruments, and scoring techniques.
-                </p>
-                <div className="mt-4 pt-4 border-t border-slate-200/60 text-xs text-slate-500 space-y-1">
-                  <p>👨‍🏫 Faculty: <span className="font-bold text-slate-800">Arun Sir</span></p>
-                  <p>🏢 Room: Hall B (Newton Hall)</p>
-                  <p>📅 Days: Monday – Saturday</p>
-                </div>
-              </div>
-              <button
-                onClick={() => {
-                  setEnquiryForm((prev) => ({ ...prev, preferredBatchTime: '05:30 PM - 07:30 PM' }));
-                  setEnquiryModalOpen(true);
-                }}
-                className="mt-6 w-full py-2.5 bg-white border border-[#0c2356] hover:bg-[#0c2356] hover:text-white text-[#0c2356] font-bold text-xs rounded-xl transition"
-              >
-                Join Vijeta Batch
-              </button>
-            </div>
-
-            {/* Batch 6: 8:00pm - 10:00pm Brahmastra Batch (Inactive showcase!) */}
-            <div className="bg-slate-100/70 rounded-2xl p-6 border-2 border-dashed border-slate-300 relative flex flex-col justify-between opacity-85">
-              <div>
-                <div className="flex items-center justify-between mb-3">
-                  <span className="px-2.5 py-1 bg-slate-700 text-slate-200 text-xs font-bold rounded-lg flex items-center space-x-1">
-                    <Clock className="w-3.5 h-3.5" />
-                    <span>08:00 PM - 10:00 PM</span>
-                  </span>
-                  <span className="px-2 py-0.5 bg-amber-100 text-amber-800 text-[11px] font-bold rounded-full">
-                    Inactive (Next Cycle)
-                  </span>
-                </div>
-                <h3 className="text-xl font-bold text-slate-700">Brahmastra Batch</h3>
-                <p className="text-xs font-semibold text-slate-500 mt-0.5">Dropper Target JEE & NEET Advanced</p>
-                <p className="text-xs text-slate-500 mt-3">
-                  Late-night master sessions for repeaters aiming for Top 500 AIR. Currently closed for mid-term admissions.
-                </p>
-                <div className="mt-4 pt-4 border-t border-slate-200 text-xs text-slate-400 space-y-1">
-                  <p>👨‍🏫 Faculty: Arun Sir</p>
-                  <p>🏢 Room: Hall A (Einstein Wing)</p>
-                  <p>📅 Days: Monday – Saturday</p>
-                </div>
-              </div>
-              <button
-                disabled
-                className="mt-6 w-full py-2.5 bg-slate-200 text-slate-500 font-bold text-xs rounded-xl cursor-not-allowed"
-              >
-                Batch Currently Inactive
-              </button>
-            </div>
-
-          </div>
+          )}
 
         </div>
       </section>
 
-      {/* Courses Offered Section */}
+      {/* Courses Offered Section - Synced with Database */}
       <section id="courses" className="py-20 bg-[#f8fafc]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
@@ -585,70 +514,106 @@ const LandingPage = () => {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[
-              {
-                title: 'Class 12th Physics Mastery',
-                tag: 'Board + JEE Mains',
-                fee: '₹24,000 / year',
-                features: ['Full Class 12 Syllabus', 'Wave & Ray Optics in Depth', 'Weekly JEE Mains Mock Tests', 'Formula Sheets & Derivation Notes'],
-              },
-              {
-                title: 'Class 11th Foundation + NEET',
-                tag: 'NEET Special',
-                fee: '₹22,000 / year',
-                features: ['Mechanics & Heat Masterclass', 'NCERT Word-by-Word Decoding', 'Previous 15 Year NEET Solved', 'Speed & Accuracy Drill'],
-              },
-              {
-                title: 'Class 10th Board Excellence',
-                tag: 'CBSE / State Board',
-                fee: '₹15,000 / 10 Mo',
-                features: ['Electricity & Magnetism Labs', 'School Exam Model Papers', 'Olympiad Stage 1 Guidance', 'Parent-Teacher Updates'],
-              },
-              {
-                title: 'Class 9th Physics Fundamentals',
-                tag: 'Early Starter',
-                fee: '₹12,000 / 10 Mo',
-                features: ['Real-World Motion Experiments', 'Intuitive Mathematical Tools', 'Gravitation & Sound Principles', 'Small Batch Size (Max 35)'],
-              },
-              {
-                title: 'Dropper Target Brahmastra',
-                tag: 'JEE / NEET Advanced',
-                fee: '₹28,000 / year',
-                features: ['High-Difficulty Numericals (Irodov)', 'Advanced Multi-Concept Practice', 'Full Syllabus Diagnostic Series', 'Personal Arun Sir Mentoring'],
-              },
-              {
-                title: 'Class 12th Board Booster',
-                tag: 'Fast-Track',
-                fee: '₹10,000 / 4 Mo',
-                features: ['Expected 5-Mark Derivations', 'Circuit Solving Tricks', 'Sample Paper Writing Practice', 'Guaranteed 90%+ in Board'],
-              },
-            ].map((course, idx) => (
-              <div key={idx} className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm hover:shadow-xl transition space-y-4">
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold uppercase tracking-wider bg-sky-100 text-[#0c2356] px-2.5 py-0.5 rounded-full">
-                    {course.tag}
-                  </span>
-                  <span className="text-sm font-extrabold text-emerald-700">{course.fee}</span>
+          {loadingData ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {[1, 2, 3].map((n) => (
+                <div key={n} className="bg-white rounded-2xl p-6 border border-slate-200 animate-pulse space-y-4">
+                  <div className="h-5 bg-slate-200 rounded w-1/4"></div>
+                  <div className="h-6 bg-slate-200 rounded w-3/4"></div>
+                  <div className="h-20 bg-slate-200 rounded w-full"></div>
+                  <div className="h-10 bg-slate-200 rounded w-full mt-4"></div>
                 </div>
-                <h3 className="text-lg font-bold text-slate-900">{course.title}</h3>
-                <ul className="space-y-2 text-xs text-slate-600">
-                  {course.features.map((f, i) => (
-                    <li key={i} className="flex items-center space-x-2">
-                      <CheckCircle className="w-4 h-4 text-emerald-500 flex-shrink-0" />
-                      <span>{f}</span>
-                    </li>
-                  ))}
-                </ul>
-                <button
-                  onClick={() => setEnquiryModalOpen(true)}
-                  className="w-full py-2.5 bg-[#0c2356] hover:bg-[#163b96] text-white font-bold text-xs rounded-xl transition"
-                >
-                  Enroll Now
-                </button>
+              ))}
+            </div>
+          ) : courses.length === 0 ? (
+            <div className="bg-white border border-slate-200 rounded-3xl p-12 text-center max-w-xl mx-auto space-y-3 shadow-sm">
+              <div className="w-12 h-12 rounded-2xl bg-sky-100 text-[#1967d2] flex items-center justify-center mx-auto">
+                <BookOpen className="w-6 h-6" />
               </div>
-            ))}
-          </div>
+              <h3 className="text-lg font-bold text-slate-800">Academic Programs Under Revision</h3>
+              <p className="text-xs text-slate-500 leading-relaxed">
+                New session courses and syllabus modules are being published. Contact us or enquire below for program schedules and fee structures.
+              </p>
+              <button
+                onClick={() => {
+                  setEnquiryForm((prev) => ({
+                    ...prev,
+                    message: 'Enquiring for upcoming course details and admissions',
+                  }));
+                  setEnquiryModalOpen(true);
+                }}
+                className="mt-2 px-6 py-2.5 bg-[#0c2356] hover:bg-[#163b96] text-white font-bold text-xs rounded-xl shadow transition"
+              >
+                Enquire for Courses & Syllabus
+              </button>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {courses.map((course) => {
+                const formattedFee = course.totalFee
+                  ? `₹${course.totalFee.toLocaleString('en-IN')}${course.duration ? ` / ${course.duration}` : ''}`
+                  : 'Fee on Enquiry';
+
+                const featuresList =
+                  course.features && course.features.length > 0
+                    ? course.features
+                    : [
+                        'Full NCERT & Advanced Theory',
+                        'Daily Practice Problem (DPP) Handouts',
+                        'Direct 1-on-1 Arun Sir Doubt Clearing',
+                        'Weekly Numerical Drill Tests',
+                      ];
+
+                return (
+                  <div
+                    key={course._id}
+                    className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm hover:shadow-xl transition space-y-4 flex flex-col justify-between"
+                  >
+                    <div className="space-y-4">
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs font-bold uppercase tracking-wider bg-sky-100 text-[#0c2356] px-2.5 py-0.5 rounded-full">
+                          {course.targetClass || 'Target Course'}
+                        </span>
+                        <span className="text-sm font-extrabold text-emerald-700">
+                          {formattedFee}
+                        </span>
+                      </div>
+                      <h3 className="text-lg font-bold text-slate-900">{course.name}</h3>
+                      {course.description && (
+                        <p className="text-xs text-slate-500 leading-relaxed line-clamp-2">
+                          {course.description}
+                        </p>
+                      )}
+                      <ul className="space-y-2 text-xs text-slate-600">
+                        {featuresList.slice(0, 4).map((f, i) => (
+                          <li key={i} className="flex items-center space-x-2">
+                            <CheckCircle className="w-4 h-4 text-emerald-500 flex-shrink-0" />
+                            <span>{f}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+
+                    <button
+                      onClick={() => {
+                        setEnquiryForm((prev) => ({
+                          ...prev,
+                          targetClass: ['9th', '10th', '11th', '12th', 'JEE Mains', 'NEET', 'Dropper'].includes(course.targetClass)
+                            ? course.targetClass
+                            : '12th',
+                          message: `Enquiring for ${course.name}`,
+                        }));
+                        setEnquiryModalOpen(true);
+                      }}
+                      className="w-full py-2.5 bg-[#0c2356] hover:bg-[#163b96] text-white font-bold text-xs rounded-xl transition"
+                    >
+                      Enroll Now
+                    </button>
+                  </div>
+                );
+              })}
+            </div>
+          )}
 
         </div>
       </section>
@@ -772,7 +737,7 @@ const LandingPage = () => {
                   No Outsourced Teaching. Pure Physics Mastery.
                 </h4>
                 <p className="text-sm text-slate-600 leading-relaxed">
-                  Unlike corporate institutes where famous teachers appear only on billboards while inexperienced assistants take classes, <strong>Arun Sir teaches all 6 batches personally</strong> from first concept to final revision.
+                  Unlike corporate institutes where famous teachers appear only on billboards while inexperienced assistants take classes, <strong>Arun Sir teaches all batches personally</strong> from first concept to final revision.
                 </p>
               </div>
 
@@ -780,7 +745,7 @@ const LandingPage = () => {
                 <div className="p-4 rounded-xl bg-sky-50/70 border border-sky-100 space-y-1.5">
                   <div className="flex items-center space-x-2 text-[#0c2356] font-bold text-sm">
                     <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-                    <span>All 6 Batches Personal</span>
+                    <span>Every Batch Taught Personally</span>
                   </div>
                   <p className="text-xs text-slate-600">
                     5 AM morning batch to 8 PM night series — every lecture delivered directly by Arun Sir.
@@ -1001,14 +966,17 @@ const LandingPage = () => {
 
             {/* Col 2 */}
             <div className="space-y-3">
-              <h4 className="text-sm font-bold text-white uppercase tracking-wider">Quick Batches</h4>
+              <h4 className="text-sm font-bold text-white uppercase tracking-wider">Active Batches</h4>
               <ul className="space-y-1.5 text-slate-300">
-                <li>05:00 AM – 07:00 AM Pratigya Batch</li>
-                <li>08:00 AM – 10:00 AM Arjun Batch</li>
-                <li>10:30 AM – 12:30 PM Sankalp Batch</li>
-                <li>03:00 PM – 05:00 PM Lakshya Batch</li>
-                <li>05:30 PM – 07:30 PM Vijeta Batch</li>
-                <li>08:00 PM – 10:00 PM Brahmastra Batch</li>
+                {batches && batches.length > 0 ? (
+                  batches.slice(0, 6).map((b) => (
+                    <li key={b._id}>
+                      {b.timeSlot} — {b.name}
+                    </li>
+                  ))
+                ) : (
+                  <li className="text-slate-400">Timetable available on enquiry</li>
+                )}
               </ul>
             </div>
 
@@ -1138,17 +1106,25 @@ const LandingPage = () => {
                   </div>
 
                   <div>
-                    <label className="block text-slate-700 font-semibold mb-1">Preferred Time</label>
+                    <label className="block text-slate-700 font-semibold mb-1">Preferred Time / Batch</label>
                     <select
                       value={enquiryForm.preferredBatchTime}
                       onChange={(e) => setEnquiryForm({ ...enquiryForm, preferredBatchTime: e.target.value })}
                       className="w-full px-2 py-2 border rounded-xl outline-none"
                     >
-                      <option value="05:00 AM - 07:00 AM">5am-7am Pratigya</option>
-                      <option value="08:00 AM - 10:00 AM">8am-10am Arjun</option>
-                      <option value="10:30 AM - 12:30 PM">10:30am-12:30pm</option>
-                      <option value="03:00 PM - 05:00 PM">3pm-5pm Lakshya</option>
-                      <option value="05:30 PM - 07:30 PM">5:30pm-7:30pm Vijeta</option>
+                      <option value="Any / Flexible Timing">Any / Flexible Timing</option>
+                      {batches && batches.length > 0 ? (
+                        batches.map((b) => (
+                          <option key={b._id} value={`${b.timeSlot} (${b.name})`}>
+                            {b.timeSlot} — {b.name}
+                          </option>
+                        ))
+                      ) : (
+                        <>
+                          <option value="Morning Batch">Morning Batch</option>
+                          <option value="Evening Batch">Evening Batch</option>
+                        </>
+                      )}
                     </select>
                   </div>
                 </div>

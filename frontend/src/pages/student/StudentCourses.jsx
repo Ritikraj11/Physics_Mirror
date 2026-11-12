@@ -6,11 +6,11 @@ import {
   CheckCircle2,
   Clock,
   Sparkles,
-  FolderDown,
   Layers,
   Calendar,
   AlertCircle,
-  FileCheck,
+  Award,
+  GraduationCap,
 } from 'lucide-react';
 import api from '../../services/api';
 
@@ -18,28 +18,45 @@ const StudentCourses = () => {
   const [downloadSuccess, setDownloadSuccess] = useState('');
   const [dpps, setDpps] = useState([]);
   const [loadingDPP, setLoadingDPP] = useState(true);
+  const [enrolledCourses, setEnrolledCourses] = useState([]);
+  const [allCourses, setAllCourses] = useState([]);
+  const [loadingCourses, setLoadingCourses] = useState(true);
 
   useEffect(() => {
-    fetchStudentDPPs();
+    fetchStudentData();
   }, []);
 
-  const fetchStudentDPPs = async () => {
+  const fetchStudentData = async () => {
     try {
       setLoadingDPP(true);
-      const res = await api.get('/dpp/student');
-      if (res.data.success) {
-        setDpps(res.data.data);
+      setLoadingCourses(true);
+      const [dppRes, userRes, coursesRes] = await Promise.all([
+        api.get('/dpp/student').catch(() => ({ data: { data: [] } })),
+        api.get('/auth/me').catch(() => ({ data: { profile: null } })),
+        api.get('/courses').catch(() => ({ data: { data: [] } })),
+      ]);
+
+      if (dppRes.data?.success) {
+        setDpps(dppRes.data.data);
+      }
+
+      if (userRes.data?.profile?.enrolledCourses) {
+        setEnrolledCourses(userRes.data.profile.enrolledCourses);
+      }
+
+      if (coursesRes.data?.success) {
+        setAllCourses(coursesRes.data.data);
       }
     } catch (err) {
-      console.error('Failed to load student DPPs:', err);
+      console.error('Failed to load student course data:', err);
     } finally {
       setLoadingDPP(false);
+      setLoadingCourses(false);
     }
   };
 
   const handleDownloadDPP = (dpp) => {
     try {
-      // Notify backend to increment count
       api.get(`/dpp/${dpp._id}/download`).catch(() => {});
 
       const link = document.createElement('a');
@@ -56,51 +73,6 @@ const StudentCourses = () => {
     }
   };
 
-  const handleDownloadStatic = (filename) => {
-    setDownloadSuccess(`Downloaded "${filename}" successfully!`);
-    setTimeout(() => setDownloadSuccess(''), 3000);
-  };
-
-  const courseModules = [
-    {
-      code: 'MOD-01',
-      title: 'Unit 1: Ray Optics & Optical Instruments',
-      chapters: 'Reflection, Refraction, Lens Maker Formula, Prism & Telescopes',
-      status: 'Completed',
-      notesFile: 'Ray_Optics_Comprehensive_Derivations.pdf',
-    },
-    {
-      code: 'MOD-02',
-      title: 'Unit 2: Wave Optics',
-      chapters: 'Huygens Principle, Interference, Young’s Double Slit & Diffraction',
-      status: 'In Progress',
-      notesFile: 'Wave_Optics_Formulas_Handout.pdf',
-    },
-    {
-      code: 'MOD-03',
-      title: 'Unit 3: Electrostatics & Potential',
-      chapters: 'Coulomb’s Law, Gauss Theorem, Capacitance & Dielectrics',
-      status: 'Next Up',
-      notesFile: 'Electrostatics_Formula_CheatSheet.pdf',
-    },
-    {
-      code: 'MOD-04',
-      title: 'Unit 4: Current Electricity & Magnetism',
-      chapters: 'Ohm’s Law, Kirchhoff’s Laws, Biot-Savart, Ampere Circuital Law',
-      status: 'Upcoming',
-      notesFile: 'Current_Electricity_Circuit_Rules.pdf',
-    },
-  ];
-
-  const studyMaterials = [
-    { title: 'Class 11 & 12 Complete Physics Formula Handbook (Physics Mirror Special)', size: '3.4 MB', type: 'PDF' },
-    { title: 'Top 100 High-Yield JEE Mains Mechanics & Electrostatics Numericals', size: '5.1 MB', type: 'PDF' },
-    { title: 'NEET Physics 2026 High-Probability Questions with Step-by-Step Solutions', size: '4.8 MB', type: 'PDF' },
-    { title: 'Board Exam 5-Mark Derivations Pocketbook (All Verified Proofs)', size: '2.9 MB', type: 'PDF' },
-    { title: 'HC Verma Volume 1 & 2 Concept Clarification Handout', size: '6.2 MB', type: 'PDF' },
-    { title: 'Dimensional Analysis & Error Calculation Rapid Sheet', size: '1.8 MB', type: 'PDF' },
-  ];
-
   return (
     <div className="space-y-6 max-w-5xl mx-auto">
       <div>
@@ -111,7 +83,7 @@ const StudentCourses = () => {
           </span>
         </h1>
         <p className="text-xs text-slate-500 mt-0.5">
-          Download Daily Practice Problem (DPP) sheets uploaded by faculty, course syllabus, and formula notes
+          Download Daily Practice Problem (DPP) sheets uploaded by faculty and view your enrolled academic courses
         </p>
       </div>
 
@@ -135,9 +107,13 @@ const StudentCourses = () => {
           <span className="text-[11px] text-slate-400">Uploaded by Faculty</span>
         </div>
 
-        {dpps.length === 0 ? (
+        {loadingDPP ? (
           <div className="py-8 text-center text-slate-400 text-xs">
-            No DPP sheets uploaded for your batch yet. New problem sets will appear here!
+            Loading your assigned DPP problem sets...
+          </div>
+        ) : dpps.length === 0 ? (
+          <div className="py-8 text-center text-slate-400 text-xs">
+            No DPP sheets uploaded for your batch yet. New problem sets will appear here once assigned!
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -206,90 +182,112 @@ const StudentCourses = () => {
         )}
       </div>
 
-      {/* Course Curriculum & Syllabus Progress */}
+      {/* Enrolled Courses Section */}
       <div className="bg-white rounded-3xl border border-slate-200/80 shadow-sm p-6 space-y-4">
         <div className="flex items-center space-x-2 text-[#0c2356] font-bold text-sm border-b pb-3">
-          <BookOpen className="w-4 h-4 text-[#ffc700]" />
-          <span>Course Modules & Syllabus Milestones</span>
+          <GraduationCap className="w-4 h-4 text-[#ffc700]" />
+          <span>Your Enrolled Courses</span>
         </div>
 
-        <div className="space-y-3">
-          {courseModules.map((mod, i) => (
-            <div
-              key={i}
-              className="p-4 bg-slate-50 hover:bg-sky-50/40 rounded-2xl border border-slate-200/80 flex flex-col sm:flex-row sm:items-center justify-between gap-3 transition"
-            >
-              <div className="flex items-start space-x-3.5">
-                <div className="w-10 h-10 rounded-xl bg-[#0c2356] text-[#ffc700] flex items-center justify-center flex-shrink-0 font-bold text-xs mt-0.5">
-                  {mod.code}
-                </div>
-                <div>
-                  <h4 className="text-sm font-bold text-slate-900 leading-tight">{mod.title}</h4>
-                  <p className="text-xs text-slate-500 mt-0.5">{mod.chapters}</p>
-                  <div className="flex items-center space-x-2 mt-1.5">
-                    <span
-                      className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
-                        mod.status === 'Completed'
-                          ? 'bg-emerald-100 text-emerald-800'
-                          : mod.status === 'In Progress'
-                          ? 'bg-sky-100 text-sky-800'
-                          : 'bg-slate-200 text-slate-700'
-                      }`}
-                    >
-                      {mod.status}
+        {enrolledCourses.length === 0 ? (
+          <div className="py-8 text-center text-slate-400 text-xs">
+            No course enrollments active yet. Visit the institute reception or contact Arun Sir for batch and course assignment.
+          </div>
+        ) : (
+          <div className="space-y-4">
+            {enrolledCourses.map((crs, idx) => (
+              <div
+                key={idx}
+                className="p-5 bg-slate-50 rounded-2xl border border-slate-200/80 space-y-3"
+              >
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 border-b border-slate-200/60 pb-3">
+                  <div>
+                    <span className="px-2.5 py-0.5 rounded-lg bg-[#0c2356] text-[#ffc700] text-[10px] font-bold uppercase inline-block mb-1">
+                      Enrolled Program
                     </span>
+                    <h3 className="text-base font-bold text-slate-900">{crs.courseName}</h3>
+                  </div>
+                  <div className="text-left sm:text-right">
+                    <span className="text-[10px] text-slate-400 font-bold uppercase block">ENROLLED BATCH</span>
+                    <span className="text-xs font-bold text-[#163b96]">{crs.batchName || 'General Batch'}</span>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+                  <div className="p-3 bg-white rounded-xl border border-slate-100">
+                    <span className="text-slate-400 font-bold uppercase text-[10px] block">ADMISSION DATE</span>
+                    <span className="font-semibold text-slate-800">
+                      {new Date(crs.admissionDate || Date.now()).toLocaleDateString('en-IN', {
+                        day: '2-digit',
+                        month: 'short',
+                        year: 'numeric',
+                      })}
+                    </span>
+                  </div>
+
+                  <div className="p-3 bg-white rounded-xl border border-slate-100">
+                    <span className="text-slate-400 font-bold uppercase text-[10px] block">AGREED FEE</span>
+                    <span className="font-bold text-emerald-600">
+                      ₹{crs.feeAgreed?.toLocaleString('en-IN') || '—'}
+                    </span>
+                  </div>
+
+                  <div className="p-3 bg-white rounded-xl border border-slate-100">
+                    <span className="text-slate-400 font-bold uppercase text-[10px] block">DURATION</span>
+                    <span className="font-semibold text-slate-800">{crs.customDuration || '1 Year Cycle'}</span>
                   </div>
                 </div>
               </div>
-
-              <div className="flex items-center space-x-2 sm:self-center">
-                <button
-                  onClick={() => handleDownloadStatic(mod.notesFile)}
-                  className="px-3.5 py-1.5 bg-white border border-slate-200 hover:border-[#163b96] text-[#0c2356] font-bold text-xs rounded-xl shadow-sm transition flex items-center space-x-1"
-                >
-                  <FileText className="w-3.5 h-3.5 text-[#163b96]" />
-                  <span>Formula Notes</span>
-                </button>
-              </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
       </div>
 
-      {/* Downloadable Handouts Section */}
-      <div className="bg-white rounded-3xl border border-slate-200/80 shadow-sm p-6 space-y-4">
-        <div className="flex items-center space-x-2 text-[#0c2356] font-bold text-sm border-b pb-3">
-          <FolderDown className="w-4 h-4 text-[#ffc700]" />
-          <span>Physics Formula Handouts & Pocketbooks (PDF)</span>
-        </div>
+      {/* Available Institute Courses & Programs */}
+      {allCourses.length > 0 && (
+        <div className="bg-white rounded-3xl border border-slate-200/80 shadow-sm p-6 space-y-4">
+          <div className="flex items-center space-x-2 text-[#0c2356] font-bold text-sm border-b pb-3">
+            <BookOpen className="w-4 h-4 text-[#ffc700]" />
+            <span>Institute Academic Programs & Syllabi</span>
+          </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
-          {studyMaterials.map((mat, idx) => (
-            <div
-              key={idx}
-              className="p-4 bg-slate-50 hover:bg-slate-100/80 rounded-2xl border border-slate-200 flex items-center justify-between space-x-3 transition"
-            >
-              <div className="flex items-center space-x-3">
-                <div className="p-2.5 rounded-xl bg-red-100 text-red-600 font-bold text-[10px]">
-                  PDF
-                </div>
-                <div>
-                  <h5 className="font-bold text-slate-800 line-clamp-1">{mat.title}</h5>
-                  <p className="text-slate-400 text-[10px]">{mat.size}</p>
-                </div>
-              </div>
-
-              <button
-                onClick={() => handleDownloadStatic(mat.title)}
-                title="Download PDF"
-                className="p-2 rounded-xl bg-white border border-slate-200 hover:bg-[#0c2356] hover:text-white text-slate-700 transition"
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {allCourses.map((course) => (
+              <div
+                key={course._id}
+                className="p-5 bg-slate-50 hover:bg-slate-100/70 rounded-2xl border border-slate-200 transition space-y-2 flex flex-col justify-between"
               >
-                <Download className="w-4 h-4" />
-              </button>
-            </div>
-          ))}
+                <div>
+                  <div className="flex items-center justify-between mb-1">
+                    <span className="px-2 py-0.5 rounded bg-[#0c2356] text-[#ffc700] text-[10px] font-mono font-bold">
+                      {course.code}
+                    </span>
+                    <span className="text-xs font-semibold text-slate-500">{course.duration}</span>
+                  </div>
+                  <h4 className="text-sm font-bold text-slate-900">{course.name}</h4>
+                  <p className="text-xs text-slate-500 mt-1 line-clamp-2">{course.description}</p>
+
+                  {course.features && course.features.length > 0 && (
+                    <div className="mt-3 space-y-1">
+                      {course.features.slice(0, 3).map((f, i) => (
+                        <p key={i} className="text-[11px] text-slate-600 flex items-center space-x-1">
+                          <span className="w-1.5 h-1.5 rounded-full bg-[#1967d2]"></span>
+                          <span>{f}</span>
+                        </p>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                <div className="pt-3 border-t border-slate-200 flex items-center justify-between text-xs">
+                  <span className="font-bold text-emerald-700">₹{course.totalFee?.toLocaleString('en-IN')}</span>
+                  <span className="text-[10px] font-semibold text-slate-400">Class: {course.targetClass}</span>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };

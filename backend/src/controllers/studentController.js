@@ -155,8 +155,8 @@ const createStudent = async (req, res, next) => {
       pendingFee: numericTotalFee,
       admissionDate: admissionDate || new Date(),
       status: status || 'Active',
-      attendanceRate: 95,
-      testAverage: 82,
+      attendanceRate: 0,
+      testAverage: 0,
     });
 
     if (batchObj) {

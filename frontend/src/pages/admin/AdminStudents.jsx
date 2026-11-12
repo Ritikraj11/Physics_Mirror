@@ -433,7 +433,7 @@ const AdminStudents = () => {
               <div className="grid grid-cols-3 gap-2 text-center p-3 bg-sky-50 rounded-xl border border-sky-100">
                 <div>
                   <span className="text-[10px] text-sky-700 font-semibold">ATTENDANCE</span>
-                  <p className="text-base font-black text-[#0c2356]">{viewStudentModal.attendanceRate || 94}%</p>
+                  <p className="text-base font-black text-[#0c2356]">{viewStudentModal.attendanceRate ?? 0}%</p>
                 </div>
                 <div>
                   <span className="text-[10px] text-sky-700 font-semibold">FEE PAID</span>

@@ -150,11 +150,11 @@ const FacultyStudents = () => {
                     </td>
                     <td className="py-3 px-4">
                       <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800">
-                        {stu.attendanceRate || 92}%
+                        {stu.attendanceRate ?? 0}%
                       </span>
                     </td>
                     <td className="py-3 px-4 font-bold text-slate-800">
-                      {stu.testAverage || 80}%
+                      {stu.testAverage ? `${stu.testAverage}%` : '—'}
                     </td>
                   </tr>
                 ))

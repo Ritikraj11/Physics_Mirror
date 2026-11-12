@@ -19,23 +19,50 @@ import api from '../../services/api';
 const StudentDashboard = () => {
   const { user } = useAuth();
   const [profile, setProfile] = useState(null);
+  const [recentDpp, setRecentDpp] = useState(null);
+  const [recentPayment, setRecentPayment] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetchStudentProfile();
+    fetchDashboardData();
   }, []);
 
-  const fetchStudentProfile = async () => {
+  const fetchDashboardData = async () => {
     setLoading(true);
     try {
-      const res = await api.get('/auth/me');
-      if (res.data.success && res.data.profile) {
-        setProfile(res.data.profile);
+      const [userRes, dppRes, paymentRes] = await Promise.all([
+        api.get('/auth/me'),
+        api.get('/dpp/student').catch(() => ({ data: { data: [] } })),
+        api.get('/payments/me').catch(() => ({ data: { payments: [] } })),
+      ]);
+
+      if (userRes.data?.success && userRes.data?.profile) {
+        setProfile(userRes.data.profile);
+      }
+      if (dppRes.data?.success && dppRes.data?.data?.length > 0) {
+        setRecentDpp(dppRes.data.data[0]);
+      }
+      if (paymentRes.data?.success && paymentRes.data?.payments?.length > 0) {
+        setRecentPayment(paymentRes.data.payments[0]);
       }
     } catch (err) {
       console.error(err);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleDownloadDpp = (dpp) => {
+    if (!dpp || !dpp.fileData) return;
+    try {
+      const link = document.createElement('a');
+      link.href = dpp.fileData;
+      link.download = dpp.fileName || `${dpp.title}.pdf`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } catch (e) {
+      alert('Unable to download file.');
     }
   };
 
@@ -131,7 +158,9 @@ const StudentDashboard = () => {
           </div>
           <div>
             <h3 className="text-4xl font-black text-white">{attendanceRate}%</h3>
-            <p className="text-xs text-sky-200 mt-1">This month (sample)</p>
+            <p className="text-xs text-sky-200 mt-1">
+              {attendanceRate > 0 ? 'Live Attendance Record' : 'No attendance recorded yet'}
+            </p>
           </div>
         </div>
 
@@ -146,8 +175,12 @@ const StudentDashboard = () => {
             </div>
           </div>
           <div>
-            <h3 className="text-4xl font-black text-[#0c2356]">{testAverage}%</h3>
-            <p className="text-xs text-slate-500 mt-1">Last 3 tests</p>
+            <h3 className="text-4xl font-black text-[#0c2356]">
+              {testAverage > 0 ? `${testAverage}%` : '—'}
+            </h3>
+            <p className="text-xs text-slate-500 mt-1">
+              {testAverage > 0 ? 'Performance Average' : 'No tests conducted yet'}
+            </p>
           </div>
         </div>
 
@@ -207,21 +240,36 @@ const StudentDashboard = () => {
             </Link>
           </div>
 
-          <div className="p-4 bg-sky-50 rounded-2xl border border-sky-100 space-y-2">
-            <span className="px-2.5 py-0.5 rounded-lg bg-[#0c2356] text-[#ffc700] text-xs font-bold">
-              {enrolledCourse?.batchName || '08:00 AM - 10:00 AM Arjun Batch'}
-            </span>
-            <h4 className="text-base font-bold text-slate-900">
-              {enrolledCourse?.courseName || 'Class 11th Physics Foundation + NEET'}
-            </h4>
-            <p className="text-xs text-slate-600">
-              Faculty: <strong>Arun Sir</strong> • Hall A
-            </p>
-            <p className="text-xs text-slate-500">Days: Monday to Saturday</p>
-          </div>
+          {enrolledCourse ? (
+            <div className="p-4 bg-sky-50 rounded-2xl border border-sky-100 space-y-2">
+              <span className="px-2.5 py-0.5 rounded-lg bg-[#0c2356] text-[#ffc700] text-xs font-bold">
+                {enrolledCourse.batchName || 'Assigned Batch'}
+              </span>
+              <h4 className="text-base font-bold text-slate-900">
+                {enrolledCourse.courseName || 'Physics Course'}
+              </h4>
+              <p className="text-xs text-slate-600">
+                Faculty: <strong>Arun Sir</strong> • Main Lecture Hall
+              </p>
+              <p className="text-xs text-slate-500">
+                Enrolled on: {new Date(enrolledCourse.admissionDate || Date.now()).toLocaleDateString('en-IN', {
+                  day: '2-digit',
+                  month: 'short',
+                  year: 'numeric',
+                })}
+              </p>
+            </div>
+          ) : (
+            <div className="p-4 bg-slate-50 rounded-2xl border border-slate-100 text-center py-6">
+              <p className="text-xs font-semibold text-slate-600">No active batch assigned yet.</p>
+              <p className="text-[11px] text-slate-400 mt-1">
+                Please contact the institute desk for batch allotment.
+              </p>
+            </div>
+          )}
         </div>
 
-        {/* Quick Links & Study Material */}
+        {/* Real Academic Resources & Downloads */}
         <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-6 space-y-4">
           <div className="flex items-center justify-between border-b pb-3">
             <div className="flex items-center space-x-2 text-[#0c2356] font-bold text-sm">
@@ -237,27 +285,46 @@ const StudentDashboard = () => {
           </div>
 
           <div className="space-y-2 text-xs">
-            <Link
-              to="/student/courses"
-              className="p-3 bg-slate-50 hover:bg-slate-100 rounded-xl flex items-center justify-between transition group"
-            >
-              <div>
-                <p className="font-bold text-slate-800">Ray & Wave Optics Formula Sheet</p>
-                <p className="text-[11px] text-slate-400">PDF Document • 4.2 MB</p>
+            {recentDpp ? (
+              <div className="p-3 bg-sky-50 hover:bg-sky-100/70 border border-sky-200/60 rounded-xl flex items-center justify-between transition">
+                <div>
+                  <p className="font-bold text-slate-900 line-clamp-1">{recentDpp.title}</p>
+                  <p className="text-[11px] text-[#1967d2] font-semibold">
+                    Unit: {recentDpp.unit} • {recentDpp.totalQuestions || 25} Questions
+                  </p>
+                </div>
+                <button
+                  onClick={() => handleDownloadDpp(recentDpp)}
+                  title="Download DPP Sheet"
+                  className="p-2 rounded-xl bg-white text-[#0c2356] hover:bg-[#0c2356] hover:text-white shadow-sm border border-sky-200 transition"
+                >
+                  <Download className="w-4 h-4" />
+                </button>
               </div>
-              <Download className="w-4 h-4 text-slate-400 group-hover:text-[#0c2356]" />
-            </Link>
+            ) : null}
 
-            <Link
-              to="/student/fees"
-              className="p-3 bg-slate-50 hover:bg-slate-100 rounded-xl flex items-center justify-between transition group"
-            >
-              <div>
-                <p className="font-bold text-slate-800">Term 1 Payment Receipt (₹15,000)</p>
-                <p className="text-[11px] text-emerald-600 font-semibold">Official Downloadable PDF</p>
+            {recentPayment ? (
+              <Link
+                to="/student/fees"
+                className="p-3 bg-emerald-50 hover:bg-emerald-100/70 border border-emerald-200/60 rounded-xl flex items-center justify-between transition group"
+              >
+                <div>
+                  <p className="font-bold text-slate-900">
+                    Fee Payment: ₹{recentPayment.amount?.toLocaleString('en-IN')}
+                  </p>
+                  <p className="text-[11px] text-emerald-700 font-semibold">
+                    Receipt #{recentPayment.receiptNo} • {new Date(recentPayment.paymentDate).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}
+                  </p>
+                </div>
+                <ArrowRight className="w-4 h-4 text-emerald-600 group-hover:translate-x-1 transition" />
+              </Link>
+            ) : null}
+
+            {!recentDpp && !recentPayment && (
+              <div className="py-6 text-center text-slate-400 text-xs">
+                No recent study materials or payment records yet.
               </div>
-              <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-[#0c2356]" />
-            </Link>
+            )}
           </div>
         </div>
 

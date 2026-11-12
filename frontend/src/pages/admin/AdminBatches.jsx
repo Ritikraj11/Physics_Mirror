@@ -293,7 +293,7 @@ const AdminBatches = () => {
                         <td className="py-2.5 px-3 font-mono font-bold text-[#1967d2]">{stu.studentId}</td>
                         <td className="py-2.5 px-3 font-bold text-slate-800">{stu.name}</td>
                         <td className="py-2.5 px-3 text-slate-600">{stu.mobile}</td>
-                        <td className="py-2.5 px-3 font-semibold text-emerald-600">{stu.attendanceRate || 92}%</td>
+                        <td className="py-2.5 px-3 font-semibold text-emerald-600">{stu.attendanceRate ?? 0}%</td>
                         <td className="py-2.5 px-3">
                           {stu.pendingFee > 0 ? (
                             <span className="text-rose-600 font-bold">Due: ₹{stu.pendingFee}</span>

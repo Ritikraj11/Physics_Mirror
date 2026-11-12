@@ -2,6 +2,7 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 const Student = require('../models/Student');
 const Faculty = require('../models/Faculty');
+const Attendance = require('../models/Attendance');
 
 const generateToken = (id) => {
   return jwt.sign(
@@ -132,6 +133,38 @@ const getMe = async (req, res, next) => {
       profile = await Student.findOne({
         $or: [{ user: user._id }, { studentId: user.studentId }],
       }).populate('enrolledCourses.batch');
+
+      if (profile) {
+        // Calculate dynamic real attendance rate from recorded attendance
+        const attendances = await Attendance.find({ 'records.student': profile._id });
+        if (attendances.length === 0) {
+          if (profile.attendanceRate !== 0) {
+            profile.attendanceRate = 0;
+            await Student.findByIdAndUpdate(profile._id, { attendanceRate: 0 }).catch(() => {});
+          }
+        } else {
+          let presentOrLate = 0;
+          let total = 0;
+          attendances.forEach((att) => {
+            const r = att.records.find((rec) => rec.student && rec.student.toString() === profile._id.toString());
+            if (r) {
+              total++;
+              if (r.status === 'Present' || r.status === 'Late') presentOrLate++;
+            }
+          });
+          const realRate = total > 0 ? Math.round((presentOrLate / total) * 100) : 0;
+          if (profile.attendanceRate !== realRate) {
+            profile.attendanceRate = realRate;
+            await Student.findByIdAndUpdate(profile._id, { attendanceRate: realRate }).catch(() => {});
+          }
+        }
+
+        // Clean legacy mock test score
+        if (profile.testAverage === 82) {
+          profile.testAverage = 0;
+          await Student.findByIdAndUpdate(profile._id, { testAverage: 0 }).catch(() => {});
+        }
+      }
     } else if (user.role === 'faculty') {
       profile = await Faculty.findOne({
         $or: [{ user: user._id }, { facultyId: user.facultyId }],

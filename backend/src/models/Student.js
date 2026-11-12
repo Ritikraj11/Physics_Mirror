@@ -112,11 +112,11 @@ const studentSchema = new mongoose.Schema(
     },
     attendanceRate: {
       type: Number,
-      default: 92,
+      default: 0,
     },
     testAverage: {
       type: Number,
-      default: 80,
+      default: 0,
     },
   },
   {

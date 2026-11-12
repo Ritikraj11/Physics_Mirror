@@ -103,7 +103,7 @@ const StudentProfile = () => {
           <div>
             <h2 className="text-xl font-bold text-slate-900">{sName}</h2>
             <p className="text-xs font-mono font-bold text-[#1967d2] mt-0.5">{sId}</p>
-            <p className="text-xs text-slate-500 mt-1">Roll No: {profile?.rollNo || '11-02'}</p>
+            <p className="text-xs text-slate-500 mt-1">Roll No: {profile?.rollNo || '—'}</p>
             {profile?.seatNumber && (
               <span className="inline-block mt-1 px-2.5 py-0.5 rounded-full text-xs font-extrabold bg-[#0c2356] text-[#ffc700] shadow-sm">
                 🪑 {profile.seatNumber}

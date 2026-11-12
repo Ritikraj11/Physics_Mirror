@@ -101,6 +101,25 @@ const saveBatchAttendance = async (req, res, next) => {
       { new: true, upsert: true, runValidators: true }
     );
 
+    // Recalculate live attendance rate for all affected students in background
+    const studentIds = records.map((r) => r.student).filter(Boolean);
+    for (const sId of studentIds) {
+      const studentHistory = await Attendance.find({ 'records.student': sId });
+      let presentOrLate = 0;
+      let total = 0;
+      studentHistory.forEach((att) => {
+        const myRecord = att.records.find((rec) => rec.student && rec.student.toString() === sId.toString());
+        if (myRecord) {
+          total++;
+          if (myRecord.status === 'Present' || myRecord.status === 'Late') {
+            presentOrLate++;
+          }
+        }
+      });
+      const realRate = total > 0 ? Math.round((presentOrLate / total) * 100) : 0;
+      await Student.findByIdAndUpdate(sId, { attendanceRate: realRate }).catch(() => {});
+    }
+
     res.status(200).json({
       success: true,
       data: attendance,
@@ -133,9 +152,16 @@ const getMyAttendanceHistory = async (req, res, next) => {
       };
     });
 
+    const presentOrLateCount = formatted.filter((r) => r.status === 'Present' || r.status === 'Late').length;
+    const computedRate = formatted.length > 0 ? Math.round((presentOrLateCount / formatted.length) * 100) : 0;
+
+    if (student.attendanceRate !== computedRate) {
+      await Student.findByIdAndUpdate(student._id, { attendanceRate: computedRate }).catch(() => {});
+    }
+
     res.status(200).json({
       success: true,
-      rate: student.attendanceRate || 94,
+      rate: computedRate,
       totalClasses: formatted.length,
       history: formatted,
     });
