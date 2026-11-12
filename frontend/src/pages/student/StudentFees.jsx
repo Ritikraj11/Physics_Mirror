@@ -5,9 +5,9 @@ import FeeReceiptModal from '../../components/FeeReceiptModal';
 
 const StudentFees = () => {
   const [feeData, setFeeData] = useState({
-    totalFee: 20000,
-    feePaid: 15000,
-    pendingFee: 5000,
+    totalFee: 0,
+    feePaid: 0,
+    pendingFee: 0,
     payments: [],
   });
   const [loading, setLoading] = useState(true);

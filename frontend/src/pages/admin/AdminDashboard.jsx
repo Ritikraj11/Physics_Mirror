@@ -19,12 +19,12 @@ import FeeReceiptModal from '../../components/FeeReceiptModal';
 
 const AdminDashboard = () => {
   const [stats, setStats] = useState({
-    totalStudents: 10,
-    activeStudents: 10,
-    totalCourses: 6,
-    totalBatches: 6,
-    feesCollected: 44050,
-    pendingFees: 63764,
+    totalStudents: 0,
+    activeStudents: 0,
+    totalCourses: 0,
+    totalBatches: 0,
+    feesCollected: 0,
+    pendingFees: 0,
     recentAdmissions: [],
     recentPayments: [],
   });
@@ -135,7 +135,7 @@ const AdminDashboard = () => {
               {stats.totalCourses} <span className="text-slate-400 text-xl font-normal">/ {stats.totalBatches}</span>
             </h3>
             <p className="text-xs font-semibold text-sky-600 mt-1">
-              6 Timed Batches
+              {stats.totalBatches} {stats.totalBatches === 1 ? 'Batch' : 'Batches'} Configured
             </p>
           </div>
           <div className="w-14 h-14 rounded-2xl bg-cyan-50 text-cyan-600 flex items-center justify-center flex-shrink-0">

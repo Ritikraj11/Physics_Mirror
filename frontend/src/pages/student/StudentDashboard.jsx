@@ -39,15 +39,14 @@ const StudentDashboard = () => {
     }
   };
 
-  // Fallbacks matching the WhatsApp screenshot (Sneha Joshi)
-  const studentName = profile?.name || user?.name || 'Sneha Joshi';
-  const studentId = profile?.studentId || user?.studentId || 'PM26009';
-  const targetClass = profile?.targetClass || 'Class 11';
-  const rollNo = profile?.rollNo || '11-02';
-  const attendanceRate = profile?.attendanceRate ?? 94;
-  const testAverage = profile?.testAverage ?? 82;
-  const feePaid = profile?.feePaid ?? 15000;
-  const pendingFee = profile?.pendingFee ?? 5000;
+  const studentName = profile?.name || user?.name || 'Student';
+  const studentId = profile?.studentId || user?.studentId || '—';
+  const targetClass = profile?.targetClass || '—';
+  const rollNo = profile?.rollNo || '—';
+  const attendanceRate = profile?.attendanceRate ?? 0;
+  const testAverage = profile?.testAverage ?? 0;
+  const feePaid = profile?.feePaid ?? 0;
+  const pendingFee = profile?.pendingFee ?? 0;
 
   const initials = studentName
     .split(' ')

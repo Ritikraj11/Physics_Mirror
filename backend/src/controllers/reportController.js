@@ -11,8 +11,8 @@ const getAdminDashboardStats = async (req, res, next) => {
   try {
     const totalStudentsCount = await Student.countDocuments();
     const activeStudentsCount = await Student.countDocuments({ status: 'Active' });
-    const totalCoursesCount = await Course.countDocuments({ status: 'Active' });
-    const totalBatchesCount = await Batch.countDocuments({ status: 'Active' });
+    const totalCoursesCount = await Course.countDocuments();
+    const totalBatchesCount = await Batch.countDocuments();
 
     const feeAggregation = await Student.aggregate([
       {
@@ -42,8 +42,8 @@ const getAdminDashboardStats = async (req, res, next) => {
       data: {
         totalStudents: totalStudentsCount,
         activeStudents: activeStudentsCount,
-        totalCourses: totalCoursesCount || 6,
-        totalBatches: totalBatchesCount || 6,
+        totalCourses: totalCoursesCount,
+        totalBatches: totalBatchesCount,
         feesCollected,
         pendingFees,
         recentAdmissions: recentAdmissions.map((s) => ({
@@ -51,8 +51,8 @@ const getAdminDashboardStats = async (req, res, next) => {
           id: s.studentId,
           name: s.name,
           date: s.createdAt,
-          course: s.enrolledCourses[0] ? s.enrolledCourses[0].courseName : 'Physics Mastery',
-          batch: s.enrolledCourses[0] ? s.enrolledCourses[0].batchName : 'Morning Batch',
+          course: s.enrolledCourses[0] ? s.enrolledCourses[0].courseName : 'Physics Coaching',
+          batch: s.enrolledCourses[0] ? s.enrolledCourses[0].batchName : 'General Batch',
         })),
         recentPayments: recentPayments.map((p) => ({
           _id: p._id,

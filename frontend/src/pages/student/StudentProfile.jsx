@@ -68,8 +68,8 @@ const StudentProfile = () => {
     }
   };
 
-  const sName = profile?.name || user?.name || 'Sneha Joshi';
-  const sId = profile?.studentId || user?.studentId || 'PM26009';
+  const sName = profile?.name || user?.name || 'Student';
+  const sId = profile?.studentId || user?.studentId || '—';
 
   return (
     <div className="space-y-6 max-w-4xl mx-auto">
@@ -129,27 +129,27 @@ const StudentProfile = () => {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
               <div className="p-3 bg-slate-50 rounded-xl space-y-1">
                 <span className="text-slate-400 font-bold uppercase text-[10px]">MOBILE</span>
-                <p className="font-bold text-slate-800">{profile?.mobile || user?.phone || '9876543209'}</p>
+                <p className="font-bold text-slate-800">{profile?.mobile || user?.phone || '—'}</p>
               </div>
 
               <div className="p-3 bg-slate-50 rounded-xl space-y-1">
                 <span className="text-slate-400 font-bold uppercase text-[10px]">EMAIL</span>
-                <p className="font-bold text-slate-800 truncate">{profile?.email || user?.email || 'student@physicsmirror.com'}</p>
+                <p className="font-bold text-slate-800 truncate">{profile?.email || user?.email || '—'}</p>
               </div>
 
               <div className="p-3 bg-slate-50 rounded-xl space-y-1">
                 <span className="text-slate-400 font-bold uppercase text-[10px]">GUARDIAN NAME</span>
-                <p className="font-bold text-slate-800">{profile?.guardianName || 'Ramesh Joshi'}</p>
+                <p className="font-bold text-slate-800">{profile?.guardianName || '—'}</p>
               </div>
 
               <div className="p-3 bg-slate-50 rounded-xl space-y-1">
                 <span className="text-slate-400 font-bold uppercase text-[10px]">GUARDIAN MOBILE</span>
-                <p className="font-bold text-slate-800">{profile?.guardianMobile || '9876543200'}</p>
+                <p className="font-bold text-slate-800">{profile?.guardianMobile || '—'}</p>
               </div>
 
               <div className="col-span-1 sm:col-span-2 p-3 bg-slate-50 rounded-xl space-y-1">
                 <span className="text-slate-400 font-bold uppercase text-[10px]">RESIDENTIAL ADDRESS</span>
-                <p className="font-medium text-slate-700">{profile?.address || 'Plot 42, Green Park Avenue, Near City Center'}</p>
+                <p className="font-medium text-slate-700">{profile?.address || '—'}</p>
               </div>
             </div>
           </div>
