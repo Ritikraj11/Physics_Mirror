@@ -14,6 +14,8 @@ import {
   Server,
   Database,
   Save,
+  UserPlus,
+  Users,
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import api from '../../services/api';
@@ -21,16 +23,28 @@ import api from '../../services/api';
 const AdminSettings = () => {
   const { user } = useAuth();
 
+  const [activeTab, setActiveTab] = useState('password'); // 'password' or 'new-admin'
+
+  // Change Password State
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showCurrent, setShowCurrent] = useState(false);
   const [showNew, setShowNew] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
-
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+
+  // Create New Admin State
+  const [newAdminName, setNewAdminName] = useState('');
+  const [newAdminEmail, setNewAdminEmail] = useState('');
+  const [newAdminPhone, setNewAdminPhone] = useState('');
+  const [newAdminPassword, setNewAdminPassword] = useState('');
+  const [showAdminPassword, setShowAdminPassword] = useState(false);
+  const [adminLoading, setAdminLoading] = useState(false);
+  const [adminError, setAdminError] = useState('');
+  const [adminSuccess, setAdminSuccess] = useState('');
 
   const handlePasswordChange = async (e) => {
     e.preventDefault();
@@ -69,6 +83,43 @@ const AdminSettings = () => {
     }
   };
 
+  const handleCreateAdmin = async (e) => {
+    e.preventDefault();
+    setAdminError('');
+    setAdminSuccess('');
+
+    if (newAdminPassword.length < 6) {
+      setAdminError('Password must be at least 6 characters long.');
+      return;
+    }
+
+    setAdminLoading(true);
+    try {
+      const res = await api.post('/auth/create-admin', {
+        name: newAdminName,
+        email: newAdminEmail,
+        password: newAdminPassword,
+        phone: newAdminPhone,
+      });
+
+      if (res.data?.success) {
+        setAdminSuccess(
+          `New Super Admin account (${res.data.data.email}) created successfully! They can now sign in using this email and password.`
+        );
+        setNewAdminName('');
+        setNewAdminEmail('');
+        setNewAdminPhone('');
+        setNewAdminPassword('');
+      }
+    } catch (err) {
+      setAdminError(
+        err.response?.data?.message || 'Unable to create admin account. Please check the details and try again.'
+      );
+    } finally {
+      setAdminLoading(false);
+    }
+  };
+
   return (
     <div className="space-y-6 max-w-5xl mx-auto">
       {/* Header */}
@@ -83,121 +134,268 @@ const AdminSettings = () => {
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         
-        {/* Left Column: Change Password Card */}
+        {/* Left Column: Management Cards */}
         <div className="lg:col-span-7 bg-white rounded-3xl border border-slate-200/80 shadow-sm p-6 sm:p-8 space-y-6">
-          <div className="flex items-center space-x-3 pb-4 border-b border-slate-100">
-            <div className="w-12 h-12 rounded-2xl bg-[#0c2356] text-[#ffc700] flex items-center justify-center shadow-md">
-              <Lock className="w-6 h-6" />
-            </div>
-            <div>
-              <h2 className="text-lg font-bold text-slate-900">Change Admin Password</h2>
-              <p className="text-xs text-slate-500">
-                Update your administrative login credentials
-              </p>
-            </div>
+          
+          {/* Action Tabs: Change Password vs Create Admin */}
+          <div className="flex bg-slate-100 p-1 rounded-2xl">
+            <button
+              type="button"
+              onClick={() => setActiveTab('password')}
+              className={`flex-1 py-2.5 rounded-xl text-xs font-bold transition flex items-center justify-center space-x-2 ${
+                activeTab === 'password'
+                  ? 'bg-white text-[#0c2356] shadow-sm'
+                  : 'text-slate-500 hover:text-slate-800'
+              }`}
+            >
+              <Lock className="w-4 h-4" />
+              <span>Change Password</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setActiveTab('new-admin')}
+              className={`flex-1 py-2.5 rounded-xl text-xs font-bold transition flex items-center justify-center space-x-2 ${
+                activeTab === 'new-admin'
+                  ? 'bg-white text-[#0c2356] shadow-sm'
+                  : 'text-slate-500 hover:text-slate-800'
+              }`}
+            >
+              <UserPlus className="w-4 h-4 text-emerald-600" />
+              <span>Create New Admin</span>
+            </button>
           </div>
 
-          {error && (
-            <div className="p-3.5 bg-red-50 border border-red-200 text-red-700 rounded-xl text-xs flex items-center space-x-2.5">
-              <AlertCircle className="w-4 h-4 flex-shrink-0" />
-              <span>{error}</span>
+          {/* TAB 1: CHANGE PASSWORD */}
+          {activeTab === 'password' && (
+            <div className="space-y-6">
+              <div className="flex items-center space-x-3 pb-4 border-b border-slate-100">
+                <div className="w-12 h-12 rounded-2xl bg-[#0c2356] text-[#ffc700] flex items-center justify-center shadow-md">
+                  <Lock className="w-6 h-6" />
+                </div>
+                <div>
+                  <h2 className="text-lg font-bold text-slate-900">Change Admin Password</h2>
+                  <p className="text-xs text-slate-500">
+                    Update your administrative login credentials
+                  </p>
+                </div>
+              </div>
+
+              {error && (
+                <div className="p-3.5 bg-red-50 border border-red-200 text-red-700 rounded-xl text-xs flex items-center space-x-2.5">
+                  <AlertCircle className="w-4 h-4 flex-shrink-0" />
+                  <span>{error}</span>
+                </div>
+              )}
+
+              {success && (
+                <div className="p-3.5 bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-xl text-xs flex items-center space-x-2.5">
+                  <CheckCircle2 className="w-4 h-4 flex-shrink-0 text-emerald-600" />
+                  <span>{success}</span>
+                </div>
+              )}
+
+              <form onSubmit={handlePasswordChange} className="space-y-4 text-xs">
+                <div>
+                  <label className="block text-slate-700 font-bold mb-1.5 uppercase tracking-wider text-[10px]">
+                    CURRENT PASSWORD <span className="text-red-500">*</span>
+                  </label>
+                  <div className="relative">
+                    <input
+                      type={showCurrent ? 'text' : 'password'}
+                      required
+                      value={currentPassword}
+                      onChange={(e) => setCurrentPassword(e.target.value)}
+                      placeholder="Enter current admin password"
+                      className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 font-medium text-sm focus:bg-white focus:ring-2 focus:ring-[#0c2356] outline-none pr-11 transition"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowCurrent(!showCurrent)}
+                      className="absolute right-3.5 top-3 text-slate-400 hover:text-slate-600"
+                    >
+                      {showCurrent ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                    </button>
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-slate-700 font-bold mb-1.5 uppercase tracking-wider text-[10px]">
+                    NEW PASSWORD <span className="text-red-500">*</span>
+                  </label>
+                  <div className="relative">
+                    <input
+                      type={showNew ? 'text' : 'password'}
+                      required
+                      minLength={6}
+                      value={newPassword}
+                      onChange={(e) => setNewPassword(e.target.value)}
+                      placeholder="Minimum 6 characters"
+                      className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 font-medium text-sm focus:bg-white focus:ring-2 focus:ring-[#0c2356] outline-none pr-11 transition"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowNew(!showNew)}
+                      className="absolute right-3.5 top-3 text-slate-400 hover:text-slate-600"
+                    >
+                      {showNew ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                    </button>
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-slate-700 font-bold mb-1.5 uppercase tracking-wider text-[10px]">
+                    CONFIRM NEW PASSWORD <span className="text-red-500">*</span>
+                  </label>
+                  <div className="relative">
+                    <input
+                      type={showConfirm ? 'text' : 'password'}
+                      required
+                      minLength={6}
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                      placeholder="Confirm your new password"
+                      className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 font-medium text-sm focus:bg-white focus:ring-2 focus:ring-[#0c2356] outline-none pr-11 transition"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowConfirm(!showConfirm)}
+                      className="absolute right-3.5 top-3 text-slate-400 hover:text-slate-600"
+                    >
+                      {showConfirm ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                    </button>
+                  </div>
+                </div>
+
+                <div className="pt-2">
+                  <button
+                    type="submit"
+                    disabled={loading}
+                    className="w-full py-3 bg-[#0c2356] hover:bg-[#163b96] text-white font-bold text-xs sm:text-sm rounded-xl shadow-md transition flex items-center justify-center space-x-2 disabled:opacity-60"
+                  >
+                    <Save className="w-4 h-4 text-[#ffc700]" />
+                    <span>{loading ? 'Updating Password...' : 'Save New Password'}</span>
+                  </button>
+                </div>
+              </form>
+
+              <div className="p-3.5 bg-sky-50 rounded-2xl border border-sky-100 text-[11px] text-sky-900 leading-relaxed">
+                🔒 <strong>Security Note:</strong> Changing your admin password invalidates existing sessions. Remember to note down your new password safely.
+              </div>
             </div>
           )}
 
-          {success && (
-            <div className="p-3.5 bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-xl text-xs flex items-center space-x-2.5">
-              <CheckCircle2 className="w-4 h-4 flex-shrink-0 text-emerald-600" />
-              <span>{success}</span>
+          {/* TAB 2: CREATE NEW ADMIN */}
+          {activeTab === 'new-admin' && (
+            <div className="space-y-6">
+              <div className="flex items-center space-x-3 pb-4 border-b border-slate-100">
+                <div className="w-12 h-12 rounded-2xl bg-emerald-600 text-white flex items-center justify-center shadow-md">
+                  <UserPlus className="w-6 h-6" />
+                </div>
+                <div>
+                  <h2 className="text-lg font-bold text-slate-900">Create New Admin Account</h2>
+                  <p className="text-xs text-slate-500">
+                    Grant administrative privileges to a new administrator
+                  </p>
+                </div>
+              </div>
+
+              {adminError && (
+                <div className="p-3.5 bg-red-50 border border-red-200 text-red-700 rounded-xl text-xs flex items-center space-x-2.5">
+                  <AlertCircle className="w-4 h-4 flex-shrink-0" />
+                  <span>{adminError}</span>
+                </div>
+              )}
+
+              {adminSuccess && (
+                <div className="p-3.5 bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-xl text-xs flex items-center space-x-2.5">
+                  <CheckCircle2 className="w-4 h-4 flex-shrink-0 text-emerald-600" />
+                  <span>{adminSuccess}</span>
+                </div>
+              )}
+
+              <form onSubmit={handleCreateAdmin} className="space-y-4 text-xs">
+                <div>
+                  <label className="block text-slate-700 font-bold mb-1.5 uppercase tracking-wider text-[10px]">
+                    ADMIN FULL NAME <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    value={newAdminName}
+                    onChange={(e) => setNewAdminName(e.target.value)}
+                    placeholder="e.g. Arun Sir or Administrator Name"
+                    className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 font-medium text-sm focus:bg-white focus:ring-2 focus:ring-[#0c2356] outline-none transition"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-slate-700 font-bold mb-1.5 uppercase tracking-wider text-[10px]">
+                    ADMIN EMAIL ADDRESS <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="email"
+                    required
+                    value={newAdminEmail}
+                    onChange={(e) => setNewAdminEmail(e.target.value)}
+                    placeholder="e.g. director@physicsmirror.com"
+                    className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 font-medium text-sm focus:bg-white focus:ring-2 focus:ring-[#0c2356] outline-none transition"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-slate-700 font-bold mb-1.5 uppercase tracking-wider text-[10px]">
+                    CONTACT PHONE NUMBER
+                  </label>
+                  <input
+                    type="tel"
+                    value={newAdminPhone}
+                    onChange={(e) => setNewAdminPhone(e.target.value)}
+                    placeholder="e.g. 9876543210"
+                    className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 font-medium text-sm focus:bg-white focus:ring-2 focus:ring-[#0c2356] outline-none transition"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-slate-700 font-bold mb-1.5 uppercase tracking-wider text-[10px]">
+                    LOGIN PASSWORD <span className="text-red-500">*</span>
+                  </label>
+                  <div className="relative">
+                    <input
+                      type={showAdminPassword ? 'text' : 'password'}
+                      required
+                      minLength={6}
+                      value={newAdminPassword}
+                      onChange={(e) => setNewAdminPassword(e.target.value)}
+                      placeholder="Minimum 6 characters"
+                      className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 font-medium text-sm focus:bg-white focus:ring-2 focus:ring-[#0c2356] outline-none pr-11 transition"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowAdminPassword(!showAdminPassword)}
+                      className="absolute right-3.5 top-3 text-slate-400 hover:text-slate-600"
+                    >
+                      {showAdminPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                    </button>
+                  </div>
+                </div>
+
+                <div className="pt-2">
+                  <button
+                    type="submit"
+                    disabled={adminLoading}
+                    className="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs sm:text-sm rounded-xl shadow-md transition flex items-center justify-center space-x-2 disabled:opacity-60"
+                  >
+                    <UserPlus className="w-4 h-4" />
+                    <span>{adminLoading ? 'Creating Admin Account...' : 'Create Admin Account'}</span>
+                  </button>
+                </div>
+              </form>
+
+              <div className="p-3.5 bg-amber-50 rounded-2xl border border-amber-200/60 text-[11px] text-amber-900 leading-relaxed">
+                🛡️ <strong>Privilege Notice:</strong> The new admin will have full administrative access across students, batches, faculty management, financial ledgers, and institute settings.
+              </div>
             </div>
           )}
-
-          <form onSubmit={handlePasswordChange} className="space-y-4 text-xs">
-            <div>
-              <label className="block text-slate-700 font-bold mb-1.5 uppercase tracking-wider text-[10px]">
-                CURRENT PASSWORD <span className="text-red-500">*</span>
-              </label>
-              <div className="relative">
-                <input
-                  type={showCurrent ? 'text' : 'password'}
-                  required
-                  value={currentPassword}
-                  onChange={(e) => setCurrentPassword(e.target.value)}
-                  placeholder="Enter current admin password"
-                  className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 font-medium text-sm focus:bg-white focus:ring-2 focus:ring-[#0c2356] outline-none pr-11 transition"
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowCurrent(!showCurrent)}
-                  className="absolute right-3.5 top-3 text-slate-400 hover:text-slate-600"
-                >
-                  {showCurrent ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                </button>
-              </div>
-            </div>
-
-            <div>
-              <label className="block text-slate-700 font-bold mb-1.5 uppercase tracking-wider text-[10px]">
-                NEW PASSWORD <span className="text-red-500">*</span>
-              </label>
-              <div className="relative">
-                <input
-                  type={showNew ? 'text' : 'password'}
-                  required
-                  minLength={6}
-                  value={newPassword}
-                  onChange={(e) => setNewPassword(e.target.value)}
-                  placeholder="Minimum 6 characters"
-                  className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 font-medium text-sm focus:bg-white focus:ring-2 focus:ring-[#0c2356] outline-none pr-11 transition"
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowNew(!showNew)}
-                  className="absolute right-3.5 top-3 text-slate-400 hover:text-slate-600"
-                >
-                  {showNew ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                </button>
-              </div>
-            </div>
-
-            <div>
-              <label className="block text-slate-700 font-bold mb-1.5 uppercase tracking-wider text-[10px]">
-                CONFIRM NEW PASSWORD <span className="text-red-500">*</span>
-              </label>
-              <div className="relative">
-                <input
-                  type={showConfirm ? 'text' : 'password'}
-                  required
-                  minLength={6}
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                  placeholder="Confirm your new password"
-                  className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 font-medium text-sm focus:bg-white focus:ring-2 focus:ring-[#0c2356] outline-none pr-11 transition"
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowConfirm(!showConfirm)}
-                  className="absolute right-3.5 top-3 text-slate-400 hover:text-slate-600"
-                >
-                  {showConfirm ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                </button>
-              </div>
-            </div>
-
-            <div className="pt-2">
-              <button
-                type="submit"
-                disabled={loading}
-                className="w-full py-3 bg-[#0c2356] hover:bg-[#163b96] text-white font-bold text-xs sm:text-sm rounded-xl shadow-md transition flex items-center justify-center space-x-2 disabled:opacity-60"
-              >
-                <Save className="w-4 h-4 text-[#ffc700]" />
-                <span>{loading ? 'Updating Password...' : 'Save New Password'}</span>
-              </button>
-            </div>
-          </form>
-
-          <div className="p-3.5 bg-sky-50 rounded-2xl border border-sky-100 text-[11px] text-sky-900 leading-relaxed">
-            🔒 <strong>Security Note:</strong> Changing your admin password invalidates existing sessions. Remember to note down your new password safely.
-          </div>
         </div>
 
         {/* Right Column: Admin Profile & Institute Info */}

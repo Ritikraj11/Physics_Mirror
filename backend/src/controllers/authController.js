@@ -180,8 +180,72 @@ const updatePassword = async (req, res, next) => {
   }
 };
 
+// @desc    Create a new admin user (Restricted to authenticated Super Admin)
+// @route   POST /api/auth/create-admin
+// @access  Private (Admin only)
+const createAdminUser = async (req, res, next) => {
+  try {
+    const { name, email, password, phone } = req.body;
+
+    if (!email || !password) {
+      return res.status(400).json({
+        success: false,
+        message: 'Please provide both email and password for the new admin account.',
+      });
+    }
+
+    if (typeof password !== 'string' || password.length < 6) {
+      return res.status(400).json({
+        success: false,
+        message: 'Admin password must be at least 6 characters long.',
+      });
+    }
+
+    if (typeof email !== 'string' || !email.includes('@')) {
+      return res.status(400).json({
+        success: false,
+        message: 'Please provide a valid email address.',
+      });
+    }
+
+    const cleanEmail = email.toLowerCase().trim();
+
+    const existingUser = await User.findOne({ email: cleanEmail });
+    if (existingUser) {
+      return res.status(400).json({
+        success: false,
+        message: `An account with email ${cleanEmail} already exists in the system.`,
+      });
+    }
+
+    const newAdmin = await User.create({
+      name: (name && typeof name === 'string' && name.trim()) || 'Institute Administrator',
+      email: cleanEmail,
+      password,
+      role: 'admin',
+      phone: (phone && typeof phone === 'string' && phone.trim()) || '',
+      isActive: true,
+    });
+
+    res.status(201).json({
+      success: true,
+      data: {
+        _id: newAdmin._id,
+        name: newAdmin.name,
+        email: newAdmin.email,
+        role: newAdmin.role,
+        phone: newAdmin.phone,
+      },
+      message: 'New admin account created successfully.',
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   login,
   getMe,
   updatePassword,
+  createAdminUser,
 };

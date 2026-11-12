@@ -24,19 +24,28 @@ async function syncAdminCredentials() {
   if (!adminEmail) return;
 
   try {
-    let admin = await User.findOne({ role: 'admin' });
+    let admin = await User.findOne({ email: adminEmail });
+    if (!admin) {
+      admin = await User.findOne({ role: 'admin' });
+    }
+
     if (admin) {
+      let changed = false;
       if (admin.email !== adminEmail) {
         admin.email = adminEmail;
+        changed = true;
       }
       if (adminPassword) {
         admin.password = adminPassword;
+        changed = true;
       }
-      await admin.save();
-      console.log(`✅ Admin credentials synchronized with environment: ${admin.email}`);
+      if (changed) {
+        await admin.save();
+        console.log(`✅ Admin credentials synchronized with environment: ${admin.email}`);
+      }
     } else {
       await User.create({
-        name: 'Arun Sir (Admin & Director)',
+        name: process.env.ADMIN_NAME || 'Arun Sir (Admin & Director)',
         email: adminEmail,
         password: adminPassword || 'PhysicsMirror123',
         role: 'admin',
