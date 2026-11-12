@@ -115,9 +115,9 @@ api.interceptors.response.use(
         userFriendlyMessage = serverMsg || 'You do not have permission to perform this action.';
       } else if (status === 404) {
         userFriendlyMessage =
-          serverMsg && !/id of|cast|mongo|objectid/i.test(serverMsg)
+          serverMsg && !/id of|cast|mongo|objectid|route not found|api route/i.test(serverMsg)
             ? serverMsg
-            : 'The requested record or resource could not be found.';
+            : 'The requested service or feature is currently updating or not available yet. Please try again shortly.';
       } else if (status >= 500) {
         userFriendlyMessage = 'The server is temporarily busy or updating. Please try again in a moment.';
       } else {

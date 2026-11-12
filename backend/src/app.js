@@ -131,7 +131,7 @@ app.use('/api/dpp', dppRoutes);
 app.use((req, res) => {
   res.status(404).json({
     success: false,
-    message: `API Route not found: ${req.originalUrl}`
+    message: 'The requested service or route is currently not available or still deploying. Please try again shortly.'
   });
 });
 
