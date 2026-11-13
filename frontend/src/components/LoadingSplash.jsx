@@ -17,12 +17,12 @@ const LoadingSplash = ({ progress = 0 }) => {
         <div className="flex flex-col items-center space-y-3">
           <div className="w-16 h-16 rounded-2xl bg-white p-1 shadow-2xl border-2 border-[#ffc700]/70 flex items-center justify-center overflow-hidden">
             <img
-              src="/logo.jpg"
+              src="/logo.jpg?v=2"
               alt="Physics Mirror Logo"
               className="w-full h-full object-contain rounded-xl"
               onError={(e) => {
                 e.target.onerror = null;
-                e.target.src = '/logo.png';
+                e.target.src = '/logo.png?v=2';
               }}
             />
           </div>

@@ -33,12 +33,12 @@ const Header = ({ onToggleSidebar }) => {
             <Link to="/" className="flex items-center space-x-2.5">
               <div className="w-8 h-8 rounded-full bg-white p-0.5 flex items-center justify-center shadow-sm overflow-hidden">
                 <img
-                  src="/logo.jpg"
+                  src="/logo.jpg?v=2"
                   alt="PM"
                   className="w-full h-full object-contain rounded-full"
                   onError={(e) => {
                     e.target.onerror = null;
-                    e.target.src = '/logo.png';
+                    e.target.src = '/logo.png?v=2';
                   }}
                 />
               </div>

@@ -173,12 +173,12 @@ const LandingPage = () => {
                 <div className="flex items-center space-x-4 pb-4 border-b border-sky-400/20">
                   <div className="w-16 h-16 rounded-2xl bg-white p-1.5 shadow-md flex items-center justify-center overflow-hidden">
                     <img
-                      src="/logo.jpg"
+                      src="/logo.jpg?v=2"
                       alt="Physics Mirror Logo"
                       className="w-full h-full object-contain rounded-xl"
                       onError={(e) => {
                         e.target.onerror = null;
-                        e.target.src = '/logo.png';
+                        e.target.src = '/logo.png?v=2';
                       }}
                     />
                   </div>
@@ -698,12 +698,12 @@ const LandingPage = () => {
 
               <div className="relative w-28 h-28 rounded-full bg-white p-1 shadow-2xl mb-4 border-2 border-[#ffc700] overflow-hidden">
                 <img
-                  src="/logo.jpg"
+                  src="/logo.jpg?v=2"
                   alt="Physics Mirror Logo"
                   className="w-full h-full object-contain rounded-full"
                   onError={(e) => {
                     e.target.onerror = null;
-                    e.target.src = '/logo.png';
+                    e.target.src = '/logo.png?v=2';
                   }}
                 />
               </div>
@@ -943,12 +943,12 @@ const LandingPage = () => {
               <div className="flex items-center space-x-3">
                 <div className="w-12 h-12 rounded-full bg-white p-1 overflow-hidden flex items-center justify-center shadow-md">
                   <img
-                    src="/logo.jpg"
+                    src="/logo.jpg?v=2"
                     alt="Physics Mirror Logo"
                     className="w-full h-full object-contain rounded-full"
                     onError={(e) => {
                       e.target.onerror = null;
-                      e.target.src = '/logo.png';
+                      e.target.src = '/logo.png?v=2';
                     }}
                   />
                 </div>

@@ -23,12 +23,12 @@ const Navbar = () => {
           <Link to="/" className="flex items-center space-x-3.5 group">
             <div className="relative w-12 h-12 rounded-full bg-white p-1 shadow-md flex items-center justify-center transition-transform group-hover:scale-105 overflow-hidden border border-slate-100">
               <img
-                src="/logo.jpg"
+                src="/logo.jpg?v=2"
                 alt="Physics Mirror Logo"
                 className="w-full h-full object-contain rounded-full"
                 onError={(e) => {
                   e.target.onerror = null;
-                  e.target.src = '/logo.png';
+                  e.target.src = '/logo.png?v=2';
                 }}
               />
             </div>
@@ -133,12 +133,12 @@ const Navbar = () => {
             <div className="flex items-center space-x-3">
               <div className="w-12 h-12 rounded-full bg-white p-1 overflow-hidden shadow-md flex items-center justify-center">
                 <img
-                  src="/logo.jpg"
+                  src="/logo.jpg?v=2"
                   alt="PM"
                   className="w-full h-full object-contain rounded-full"
                   onError={(e) => {
                     e.target.onerror = null;
-                    e.target.src = '/logo.png';
+                    e.target.src = '/logo.png?v=2';
                   }}
                 />
               </div>
