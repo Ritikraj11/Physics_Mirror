@@ -10,7 +10,7 @@ const StudentLayout = () => {
   const { user, loading } = useAuth();
 
   if (loading) {
-    return <LoadingSplash progress={80} message="Verifying session with database..." />;
+    return <LoadingSplash progress={80} delay={750} />;
   }
 
   if (!user || (user.role !== 'student' && user.role !== 'admin')) {

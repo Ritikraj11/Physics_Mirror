@@ -1,6 +1,21 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
-const LoadingSplash = ({ progress = 0 }) => {
+const LoadingSplash = ({ progress = 0, delay = 0 }) => {
+  const [visible, setVisible] = useState(delay === 0);
+
+  useEffect(() => {
+    if (delay === 0) {
+      setVisible(true);
+      return;
+    }
+    const timer = setTimeout(() => {
+      setVisible(true);
+    }, delay);
+    return () => clearTimeout(timer);
+  }, [delay]);
+
+  if (!visible) return null;
+
   const currentProgress = Math.min(100, Math.max(0, Math.round(progress)));
   const circumference = 314.16; // 2 * Math.PI * 50
   const strokeDashoffset = circumference - (currentProgress / 100) * circumference;
