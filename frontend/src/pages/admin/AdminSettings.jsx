@@ -350,7 +350,7 @@ const AdminSettings = () => {
                     type="tel"
                     value={newAdminPhone}
                     onChange={(e) => setNewAdminPhone(e.target.value)}
-                    placeholder="e.g. 9876543210"
+                    placeholder="e.g. 8733912347"
                     className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 font-medium text-sm focus:bg-white focus:ring-2 focus:ring-[#0c2356] outline-none transition"
                   />
                 </div>
@@ -449,7 +449,7 @@ const AdminSettings = () => {
             <div className="pt-3 border-t border-sky-800/60 space-y-2 text-xs text-slate-300">
               <p className="flex items-center space-x-2">
                 <Phone className="w-3.5 h-3.5 text-[#ffc700]" />
-                <span>+91 98765 43210</span>
+                <span>+91 87339 12347</span>
               </p>
               <p className="flex items-center space-x-2">
                 <Mail className="w-3.5 h-3.5 text-[#ffc700]" />

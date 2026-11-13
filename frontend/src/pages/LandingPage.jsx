@@ -1022,7 +1022,7 @@ const LandingPage = () => {
                 </p>
                 <p className="flex items-center space-x-2 pt-1">
                   <Phone className="w-3.5 h-3.5 text-[#ffc700]" />
-                  <span>+91 98765 43210</span>
+                  <span>+91 87339 12347</span>
                 </p>
                 <p className="flex items-center space-x-2">
                   <Mail className="w-3.5 h-3.5 text-[#ffc700]" />
