@@ -58,12 +58,12 @@ const Login = () => {
         <Link to="/" className="flex items-center space-x-3 group">
           <div className="w-12 h-12 rounded-full bg-white p-1 shadow-md flex items-center justify-center overflow-hidden border border-slate-100">
             <img
-              src="/logo.jpg?v=2"
+              src="/logo.png?v=3"
               alt="Physics Mirror Logo"
               className="w-full h-full object-contain rounded-full"
               onError={(e) => {
                 e.target.onerror = null;
-                e.target.src = '/logo.png?v=2';
+                e.target.src = '/logo.jpg?v=3';
               }}
             />
           </div>

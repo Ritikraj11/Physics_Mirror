@@ -45,12 +45,12 @@ const FeeReceiptModal = ({ isOpen, onClose, payment }) => {
             <div className="flex items-center space-x-3.5">
               <div className="w-14 h-14 rounded-full bg-white p-1 border border-slate-200 shadow-sm flex items-center justify-center overflow-hidden">
                 <img
-                  src="/logo.jpg?v=2"
+                  src="/logo.png?v=3"
                   alt="Physics Mirror Logo"
                   className="w-full h-full object-contain rounded-full"
                   onError={(e) => {
                     e.target.onerror = null;
-                    e.target.src = '/logo.png?v=2';
+                    e.target.src = '/logo.jpg?v=3';
                   }}
                 />
               </div>
