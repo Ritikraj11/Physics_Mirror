@@ -1,0 +1,13 @@
+# Robots.txt for Physics Mirror (Google Search Console & SEO)
+User-agent: *
+Allow: /
+Allow: /login
+Disallow: /admin
+Disallow: /admin/
+Disallow: /faculty
+Disallow: /faculty/
+Disallow: /student
+Disallow: /student/
+Disallow: /api/
+
+Sitemap: https://www.physicsmirror.co.in/sitemap.xml

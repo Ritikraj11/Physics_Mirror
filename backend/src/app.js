@@ -42,6 +42,8 @@ app.use((req, res, next) => {
 
 // Production CORS Configuration
 const allowedOrigins = [
+  'https://www.physicsmirror.co.in',
+  'https://physicsmirror.co.in',
   'https://physics-mirror-indol.vercel.app',
   'https://physics-mirror-api.onrender.com',
   'https://physicsmirror.com',
