@@ -209,7 +209,7 @@ const Login = () => {
           {/* Yellow Info Box (Matches WhatsApp Screenshot) */}
           <div className="mt-5 p-3.5 bg-[#fff9db] border border-amber-200/80 rounded-2xl text-[11px] text-amber-900 leading-relaxed">
             Physics Mirror Portal. For account assistance, admission queries, or batch access, contact our desk at{' '}
-            <strong className="underline decoration-amber-600 font-bold">+91 98765 43210</strong>.
+            <strong className="underline decoration-amber-600 font-bold">+91 87339 12347</strong>.
           </div>
 
         </div>

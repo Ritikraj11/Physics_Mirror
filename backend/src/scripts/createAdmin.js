@@ -42,7 +42,7 @@ async function run() {
   let name = args.name || 'Physics Mirror Admin';
   let email = args.email;
   let password = args.password;
-  let phone = args.phone || '9876543210';
+  let phone = args.phone || '8733912347';
 
   // If missing and interactive terminal available
   if (!email && process.stdin.isTTY) {
