@@ -443,7 +443,7 @@ const AdminSettings = () => {
 
             <div>
               <h4 className="text-lg font-black text-white">PHYSICS MIRROR</h4>
-              <p className="text-xs text-sky-200 mt-0.5">Pipradi, Jhajha, District – Jamui, Bihar, India.</p>
+              <p className="text-xs text-sky-200 mt-0.5">Pipradih, Jhajha, District – Jamui, Bihar, India.</p>
             </div>
 
             <div className="pt-3 border-t border-sky-800/60 space-y-2 text-xs text-slate-300">

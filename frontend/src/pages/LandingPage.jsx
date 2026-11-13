@@ -828,7 +828,7 @@ const LandingPage = () => {
                     PHYSICS <span className="text-[#ffc700]">MIRROR</span>
                   </h3>
                   <p className="text-sm font-semibold text-sky-200 mt-1">
-                    Pipradi, Jhajha, District – Jamui, Bihar, India.
+                    Pipradih, Jhajha, District – Jamui, Bihar, India.
                   </p>
                 </div>
 
@@ -852,7 +852,7 @@ const LandingPage = () => {
                         Find Us Easily
                       </h4>
                       <p className="text-xs text-sky-100 font-semibold mt-1">
-                        Pipradi, Jhajha, Jamui, Bihar.
+                        Pipradih, Jhajha, Jamui, Bihar.
                       </p>
                     </div>
                   </div>
@@ -862,7 +862,7 @@ const LandingPage = () => {
               {/* Action Buttons */}
               <div className="pt-6 border-t border-sky-400/20 flex flex-col sm:flex-row items-stretch sm:items-center space-y-3 sm:space-y-0 sm:space-x-4 relative z-10">
                 <a
-                  href="https://www.google.com/maps/search/?api=1&query=Pipradi,+Jhajha,+Jamui,+Bihar"
+                  href="https://www.google.com/maps/search/?api=1&query=Pipradih,+Jhajha,+Jamui,+Bihar"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="px-6 py-3 bg-[#ffc700] hover:bg-[#eeb900] text-[#0c2356] font-bold text-xs rounded-xl shadow-md transition flex items-center justify-center space-x-2"
@@ -916,7 +916,7 @@ const LandingPage = () => {
                     </li>
                     <li className="flex items-center space-x-2">
                       <span className="w-1.5 h-1.5 rounded-full bg-[#163b96]"></span>
-                      <span>Located along main connecting road in Pipradi, Jhajha</span>
+                      <span>Located along main connecting road in Pipradih, Jhajha</span>
                     </li>
                   </ul>
                 </div>
@@ -1012,13 +1012,13 @@ const LandingPage = () => {
                 <p className="font-bold text-white tracking-wide">PHYSICS MIRROR</p>
                 <p className="flex items-start space-x-2">
                   <MapPin className="w-4 h-4 text-[#ffc700] mt-0.5 flex-shrink-0" />
-                  <span className="leading-snug">Pipradi, Jhajha,<br />District – Jamui, Bihar, India.</span>
+                  <span className="leading-snug">Pipradih, Jhajha,<br />District – Jamui, Bihar, India.</span>
                 </p>
                 <p className="text-[11px] text-slate-400 pl-6 leading-relaxed">
                   ~100m West of Sadar Hospital, Jhajha & ~20m East of Former MLA Dr. Ravindra Yadav's residence.
                 </p>
                 <p className="text-xs text-[#ffc700] pl-6 font-semibold">
-                  Find Us Easily – Pipradi, Jhajha, Jamui, Bihar.
+                  Find Us Easily – Pipradih, Jhajha, Jamui, Bihar.
                 </p>
                 <p className="flex items-center space-x-2 pt-1">
                   <Phone className="w-3.5 h-3.5 text-[#ffc700]" />
@@ -1034,7 +1034,7 @@ const LandingPage = () => {
           </div>
 
           <div className="pt-6 text-center text-xs text-slate-500">
-            <p>© {new Date().getFullYear()} Physics Mirror. Pipradi, Jhajha, Jamui, Bihar. All rights reserved.</p>
+            <p>© {new Date().getFullYear()} Physics Mirror. Pipradih, Jhajha, Jamui, Bihar. All rights reserved.</p>
           </div>
         </div>
       </footer>
@@ -1046,7 +1046,7 @@ const LandingPage = () => {
             <div className="flex items-center justify-between border-b pb-3">
               <div>
                 <h3 className="text-base font-bold text-[#0c2356]">Admission Enquiry</h3>
-                <p className="text-xs text-slate-500">Pipradi, Jhajha, Jamui, Bihar • Mentored by Arun Sir</p>
+                <p className="text-xs text-slate-500">Pipradih, Jhajha, Jamui, Bihar • Mentored by Arun Sir</p>
               </div>
               <button onClick={() => setEnquiryModalOpen(false)} className="text-slate-400 hover:text-slate-700">
                 ✕
