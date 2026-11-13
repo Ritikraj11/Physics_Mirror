@@ -62,7 +62,7 @@ const FeeReceiptModal = ({ isOpen, onClose, payment }) => {
                   CONCEPT-FIRST PHYSICS COACHING
                 </p>
                 <p className="text-[10px] text-slate-500">
-                  Pipradi, Jhajha, District – Jamui, Bihar, India • Helpline: +91 98765 43210
+                  Pipradi, Jhajha, District – Jamui, Bihar, India • Helpline: +91 87339 12347
                 </p>
               </div>
             </div>

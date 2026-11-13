@@ -873,11 +873,11 @@ const LandingPage = () => {
                 </a>
 
                 <a
-                  href="tel:+919876543210"
+                  href="tel:+918733912347"
                   className="px-5 py-3 bg-white/10 hover:bg-white/20 text-white font-semibold text-xs rounded-xl border border-white/20 transition flex items-center justify-center space-x-2"
                 >
                   <Phone className="w-3.5 h-3.5 text-[#ffc700]" />
-                  <span>Call Us: +91 98765 43210</span>
+                  <span>Call Us: +91 87339 12347</span>
                 </a>
               </div>
             </div>
