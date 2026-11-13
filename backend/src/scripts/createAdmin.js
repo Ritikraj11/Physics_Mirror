@@ -39,26 +39,12 @@ async function run() {
 
   const args = parseArgs();
 
-  let name = args.name;
+  let name = args.name || 'Physics Mirror Admin';
   let email = args.email;
   let password = args.password;
-  let phone = args.phone;
+  let phone = args.phone || '9876543210';
 
-  // Fallback to .env values if args not provided
-  if (!email && process.env.ADMIN_EMAIL) {
-    email = process.env.ADMIN_EMAIL;
-  }
-  if (!password && process.env.ADMIN_PASSWORD) {
-    password = process.env.ADMIN_PASSWORD;
-  }
-  if (!name) {
-    name = process.env.ADMIN_NAME || 'Physics Mirror Admin';
-  }
-  if (!phone) {
-    phone = process.env.ADMIN_PHONE || '9876543210';
-  }
-
-  // If still missing and interactive terminal available
+  // If missing and interactive terminal available
   if (!email && process.stdin.isTTY) {
     email = await prompt('Enter Admin Email: ');
   }
@@ -69,7 +55,6 @@ async function run() {
   if (!email || !password) {
     console.error('❌ Error: Email and password are required.');
     console.log('Usage: node backend/src/scripts/createAdmin.js --email <email> --password <password> [--name <name>] [--phone <phone>]');
-    console.log('Or set ADMIN_EMAIL and ADMIN_PASSWORD in backend/.env');
     process.exit(1);
   }
 
